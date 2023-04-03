@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from 'vue'
+import {defineComponent, onMounted, ref} from 'vue'
 import type {MenuOption} from 'naive-ui'
 import {useRouter, useRoute} from "vue-router";
 import {index_routers} from '@/router/routes/index_routers'
@@ -48,13 +48,16 @@ export default defineComponent({
         const handleUpdateValue = (key: any, item: any) => {
             router.push({path: key});
         };
-
+        onMounted(() => {
+            document.getElementsByClassName('n-menu-item-content__icon')[0].click()
+        })
         return {
             collapsed: ref(true),
             menuOptions,
             handleUpdateValue
         }
-    }
+    },
+
 })
 
 </script>
