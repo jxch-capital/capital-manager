@@ -46,10 +46,10 @@ export default defineComponent({
     setup() {
         const calcPosition = ref({
             totalAssets: null,
-            totalAssetsVolatility: null,
+            totalAssetsVolatility: 1,
             targetRate: 30,
             targetPrice: null,
-            deadline: null,
+            deadline: 2,
             deadlinePrice: null,
             minPositionSizeOfTheTarget: 1
         })

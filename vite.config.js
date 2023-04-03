@@ -9,7 +9,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 
 export default () => {
     return {
-        base: '/',
+        base: './',
         plugins: [
             vue(),
             // vitePluginCompression({
