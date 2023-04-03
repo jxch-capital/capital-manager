@@ -1,10 +1,12 @@
-import { App } from 'vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
-import { constantRoutes } from './routes/constants'
+import {App} from 'vue'
+import {createRouter, createWebHashHistory} from 'vue-router'
+import {constantRoutes} from './routes/constants'
+import {baseRoutes} from './routes/base'
+
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes: constantRoutes,
+    routes: [...baseRoutes, ...constantRoutes],
 })
 
 export function useAppRouter(app: App) {
