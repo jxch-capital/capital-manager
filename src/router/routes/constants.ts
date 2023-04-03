@@ -3,7 +3,6 @@ export const constantRoutes = [
     {
         path: '/404',
         name: '404',
-        key: '404',
         component: () => import('@/views/exception/404.vue'),
         meta: {
             hidden: true,
