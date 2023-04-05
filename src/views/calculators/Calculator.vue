@@ -29,6 +29,7 @@ export default defineComponent({
             targetPrice2: null,
             targetPLRate1: null,
             targetPLRate2: null,
+            winningPercentage: 50
         })
 
         return {
