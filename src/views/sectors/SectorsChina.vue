@@ -1,7 +1,7 @@
 <template>
     <n-space>
-        <n-card :title="sectors.industry['name']" hoverable>
-            <TableCharts :sector="sectors.industry"/>
+        <n-card v-for="(val) in sectors" :title="val['name']" hoverable>
+            <TableCharts :sector="val"/>
         </n-card>
     </n-space>
 </template>
