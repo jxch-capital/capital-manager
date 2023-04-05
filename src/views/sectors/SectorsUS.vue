@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import {defineComponent, onBeforeMount, reactive} from 'vue'
 import TableCharts from "vv/sectors/TableCharts.vue";
-import {apis} from "@/api"
+import {onBeforeMount, reactive} from "vue";
+import {apis} from "@/api";
 import dayjs from "dayjs";
 
-export default defineComponent({
-    name: "SectorsChina",
+export default {
+    name: "SectorsUS",
     components: {TableCharts},
     setup() {
         const template = "YYYY-MM-DD"
@@ -44,10 +44,17 @@ export default defineComponent({
             industry: {
                 name: "行业板块-3M",
                 frequency: "d",
-                service_code: 'bs',
-                codes: ["sh.000090", "sh.000933", "sz.399997", "sh.000932", "sz.399808", "sz.399928", "sh.000934", "sz.399935"],
+                service_code: 'pdr-stooq',
+                codes: ["SPY.US", "XLI.US", "XLE.US", "XLY.US", "XLP.US", "XLF.US", "XLV.US", "XLC.US", "XLB.US", "XLRE.US", "XLK.US", "XLU.US"],
                 res: null
-            }
+            },
+            it: {
+                name: "IT板块-3M",
+                frequency: "d",
+                service_code: 'pdr-stooq',
+                codes: ["QQQ.US", "GOOOGL.US", "AAPL.US", "MSFT.US", "TSLA.US", "AMZN.US", "AMD.US", "TSM.US", "NVDA.US", "META.US"],
+                res: null
+            },
         })
 
         function update() {
@@ -73,8 +80,7 @@ export default defineComponent({
             update
         }
     }
-})
-
+}
 </script>
 
 <style scoped>

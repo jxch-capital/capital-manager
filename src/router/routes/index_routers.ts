@@ -12,6 +12,13 @@ function renderIcon(icon: Component) {
 
 export const index_routers = [
     {
+        path: '/sectors-us',
+        label: "美国板块",
+        name: 'sectors-us',
+        key: 'sectors-us',
+        icon: renderIcon(TrendingUp),
+        component: () => import('vv/sectors/SectorsUS.vue'),
+    }, {
         path: '/sectors-china',
         label: "中国板块",
         name: 'sectors-china',
