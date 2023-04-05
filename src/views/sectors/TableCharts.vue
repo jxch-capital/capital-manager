@@ -2,8 +2,9 @@
     <n-table :bordered="false" :single-line="false" :single-column="true" :bottom-bordered="false">
         <tbody>
         <tr v-for="(val, key) in sector['res']">
-            <td>{{ key }}</td>
-            <td :style="{background: td_background(((val[val.length - 1].close - val[0].close) / val[0].close * 100).toFixed(2))}">
+            <td :title="key">{{ key.substring(0, 6) }}</td>
+            <td :style="{background: td_background(((val[val.length - 1].close - val[0].close) / val[0].close * 100).toFixed(2))}"
+                :title="val[val.length - 1].close">
                 {{ ((val[val.length - 1].close - val[0].close) / val[0].close * 100).toFixed(2) }}%
             </td>
             <td>

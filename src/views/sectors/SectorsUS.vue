@@ -1,5 +1,5 @@
 <template>
-    <n-space>
+    <n-space size="small">
         <n-card title="条件">
             <n-space :vertical="true" size="small">
                 <n-radio-group v-model:value="condition.cycle">
@@ -42,19 +42,26 @@ export default {
         })
         const sectors = reactive({
             industry: {
-                name: "行业板块-3M",
+                name: "行业板块",
                 frequency: "d",
                 service_code: 'pdr-stooq',
                 codes: ["SPY.US", "XLI.US", "XLE.US", "XLY.US", "XLP.US", "XLF.US", "XLV.US", "XLC.US", "XLB.US", "XLRE.US", "XLK.US", "XLU.US"],
                 res: null
             },
             it: {
-                name: "IT板块-3M",
+                name: "IT板块",
                 frequency: "d",
                 service_code: 'pdr-stooq',
-                codes: ["QQQ.US", "GOOOGL.US", "AAPL.US", "MSFT.US", "TSLA.US", "AMZN.US", "AMD.US", "TSM.US", "NVDA.US", "META.US"],
+                codes: ["QQQ.US", "GOOGL.US", "AAPL.US", "MSFT.US", "TSLA.US", "AMZN.US", "AMD.US", "TSM.US", "NVDA.US", "META.US"],
                 res: null
             },
+            blue: {
+                name: "蓝筹股",
+                frequency: "d",
+                service_code: 'pdr-stooq',
+                codes: ["SPY.US", "BRK-B.US", "BA.US"],
+                res: null
+            }
         })
 
         function update() {
