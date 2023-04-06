@@ -11,14 +11,14 @@ function renderIcon(icon: Component) {
 export const index_routers = [
     {
         path: '/breaths',
-        label: "市场呼吸图",
+        label: "美股市场呼吸图",
         name: 'breaths',
         key: 'breaths',
         icon: renderIcon(ChartLineSmooth),
         component: () => import('vv/breaths/Breaths.vue'),
     }, {
         path: '/sectors-us',
-        label: "美国板块",
+        label: "板块图",
         name: 'sectors-us',
         key: 'sectors-us',
         icon: renderIcon(TrendingUp),

@@ -67,7 +67,7 @@ export default defineComponent({
                 max: "dataMax"
             }],
             series: [{
-                name: 'SPY',
+                name: title,
                 type: 'line',
                 yAxisIndex: 1,
                 data: sectorClose,
@@ -108,7 +108,7 @@ export default defineComponent({
                     },
                 }
             }, {
-                name: '总分',
+                name: subTitle,
                 type: 'line',
                 yAxisIndex: 0,
                 smooth: 0,
