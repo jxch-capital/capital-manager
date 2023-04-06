@@ -18,7 +18,7 @@ export const index_routers = [
         component: () => import('vv/breaths/Breaths.vue'),
     }, {
         path: '/sectors-us',
-        label: "美国板块",
+        label: "板块图",
         name: 'sectors-us',
         key: 'sectors-us',
         icon: renderIcon(TrendingUp),
