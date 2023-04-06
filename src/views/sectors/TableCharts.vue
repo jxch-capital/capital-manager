@@ -1,5 +1,5 @@
 <template>
-    <n-table size="small" :bordered="false" :single-line="false" :single-column="true" :bottom-bordered="false">
+    <n-table size="small" :bordered="false" :single-line="true" :single-column="true" :bottom-bordered="false">
         <tbody>
         <tr v-for="(val, key, index) in sector['res']">
             <td v-if="sector['alias']" :title="key" nowrap="nowrap">{{ sector['alias'][index].substring(0, 6) }}</td>

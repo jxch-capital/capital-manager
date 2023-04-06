@@ -15,14 +15,16 @@ import {
 } from 'echarts/charts'
 import {
     LegendComponent, TitleComponent,
-    GridComponent,
-    TooltipComponent, MarkPointComponent
+    GridComponent,ToolboxComponent,
+    TooltipComponent, MarkPointComponent,
+    VisualMapComponent
 } from 'echarts/components'
 
 use([
-    LegendComponent, TitleComponent,
+    LegendComponent, TitleComponent,ToolboxComponent,
     CanvasRenderer, BarChart, PieChart, LineChart,
     GridComponent, TooltipComponent, MarkPointComponent,
+    VisualMapComponent
 ]);
 
 createApp(App)
