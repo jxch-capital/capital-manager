@@ -11,7 +11,7 @@ function renderIcon(icon: Component) {
 export const index_routers = [
     {
         path: '/breaths',
-        label: "市场呼吸图",
+        label: "美股市场呼吸图",
         name: 'breaths',
         key: 'breaths',
         icon: renderIcon(ChartLineSmooth),
