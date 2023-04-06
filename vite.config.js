@@ -47,8 +47,8 @@ export default () => {
             open: true,
             proxy: {
                 "/capital_service_api": {
-                    // target: "http://jiangxicheng.xyz:15000",
-                    target: "http://127.0.0.1:15000",
+                    target: "http://jiangxicheng.xyz:15000",
+                    // target: "http://127.0.0.1:15000",
                     changeOrigin: true,
                     rewrite: (path) => path.replace(/^\/capital_service_api/, ''),
                 },

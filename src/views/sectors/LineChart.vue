@@ -88,6 +88,7 @@ export default defineComponent({
             series: [
                 {
                     name: "价格",
+                    data: closeArr,
                     type: "line",
                     showSymbol: true,
                     symbol: "circle",
@@ -99,7 +100,6 @@ export default defineComponent({
                     tooltip: {
                         show: true
                     },
-                    data: closeArr,
                     lineStyle: {
                         color: "#000", // 线条颜色
                         width: 1
