@@ -135,7 +135,31 @@ export default {
                 codes: ["QQQ.US", "BABA.US", "BIDU.US", "JD.US", "PDD.US", "NTES.US", "WB.US", "BILI.US", "TCOM.US"],
                 alias: ["QQQ", "BABA", "BIDU", "JD", "PDD", "网易", "WB", "BILI", "携程"],
                 res: null
-            }
+            },
+            thematic: {
+                name: "主题【美】",
+                frequency: "d",
+                service_code: 'pdr-stooq',
+                codes: ["ARKK.US", "MOO.US", "BLOK.US", "ARKG.US", "IBUY.US", "MJ.US", "FFTY.US", "BOTZ.US"],
+                alias: ["ARK", "农业", "区块", "基因", "IBUY", "大麻", "蓝筹", "AI"],
+                res: null
+            },
+            treasuryBond: {
+                name: "国债利率",
+                frequency: "d",
+                service_code: 'pdr-stooq',
+                codes: ["30USY.B", "10USY.B", "2USY.B", "10DEY.B", "10CNY.B"],
+                alias: ["30USY", "10USY", "2USY", "10DEY", "10CNY"],
+                res: null
+            },
+            tips: {
+                name: "通胀",
+                frequency: "d",
+                service_code: 'pdr-stooq',
+                codes: ["TIP.US", ],
+                alias: ["US", ],
+                res: null
+            },
         })
 
         function update() {
