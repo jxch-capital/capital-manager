@@ -17,14 +17,7 @@ export const index_routers = [
         name: 'sectors-us',
         key: 'sectors-us',
         icon: renderIcon(TrendingUp),
-        component: () => import('vv/sectors/SectorsUS.vue'),
-    }, {
-        path: '/sectors-china',
-        label: "中国板块",
-        name: 'sectors-china',
-        key: 'sectors-china',
-        icon: renderIcon(TrendingUp),
-        component: () => import('vv/sectors/SectorsChina.vue'),
+        component: () => import('vv/sectors/Sectors.vue'),
     }, {
         path: '/calculator',
         label: "计算器",
