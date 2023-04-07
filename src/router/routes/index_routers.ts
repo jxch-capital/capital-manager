@@ -1,7 +1,7 @@
 import {Component, h} from "vue";
 import {NIcon} from "naive-ui";
 import {Calculator, TrendingUp} from '@vicons/ionicons5'
-import {ChartLineSmooth} from '@vicons/carbon'
+import {ChartLineSmooth, ToolsAlt} from '@vicons/carbon'
 
 function renderIcon(icon: Component) {
     return () => h(NIcon, null, {default: () => h(icon)})
@@ -30,5 +30,12 @@ export const index_routers = [
         key: 'calculator',
         icon: renderIcon(Calculator),
         component: () => import('vv/calculators/Calculator.vue'),
+    },{
+        path: '/tools',
+        label: "市场大地图",
+        name: 'tools',
+        key: 'tools',
+        icon: renderIcon(ToolsAlt),
+        component: () => import('vv/tools/Tools.vue'),
     },
 ]
