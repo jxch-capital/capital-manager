@@ -49,18 +49,24 @@
             </n-table>
             <n-space :vertical="true" size="small">
                 <n-card size="small" hoverable>
+                    <Heatmap v-if="scores.table && scores.date_arr_re"
+                             :x="scores.date_arr_re"
+                             :y="Object.keys(scores.table).slice()"
+                             :heatmap-data="scores.heatmapData"/>
+                </n-card>
+                <n-card size="small" hoverable>
                     <CompareLine size="small" title="SPY" sub-title="总分"
                                  :date-arr="scores.date_arr_re"
                                  :score-arr="scores.sum_arr_re"
                                  :sectorClose="scores.spy"/>
                 </n-card>
                 <n-card v-for="(item) in scores.compare" size="small" hoverable>
-                    <CompareLine  v-if="scores.table && item.scoreKey in scores.table" size="small"
-                                  :title="item.title"
-                                  :sub-title="item.subTitle"
-                                  :date-arr="scores.date_arr_re"
-                                  :score-arr="scores.table[item.scoreKey].slice().reverse()"
-                                  :sector-close="item.data"/>
+                    <CompareLine v-if="scores.table && item.scoreKey in scores.table" size="small"
+                                 :title="item.title"
+                                 :sub-title="item.subTitle"
+                                 :date-arr="scores.date_arr_re"
+                                 :score-arr="scores.table[item.scoreKey].slice().reverse()"
+                                 :sector-close="item.data"/>
                 </n-card>
 
             </n-space>
@@ -74,10 +80,11 @@ import chroma from 'chroma-js'
 import {apis} from "@/api";
 import dayjs from "dayjs";
 import CompareLine from "vv/breaths/CompareLine.vue";
+import Heatmap from "vv/breaths/Heatmap.vue";
 
 export default defineComponent({
     name: "Breaths",
-    components: {CompareLine},
+    components: {Heatmap, CompareLine},
     setup() {
         const template = "YYYY-MM-DD"
         const condition = reactive({
@@ -87,6 +94,7 @@ export default defineComponent({
         })
         const scores = reactive({
             table: null,
+            heatmapData: [],
             data_arr: [],
             sum_arr: [],
             date_arr: [],
@@ -108,12 +116,12 @@ export default defineComponent({
             compareServiceCode: 'pdr-stooq',
             compareCodes: ['XLI', 'XLE', 'XLY', 'XLP', 'XLF', 'XLV', 'XLC', 'XLB', 'XLRE', 'XLK', 'XLU'],
             compare: [
-               {
-                   title: 'XLI',
-                   subTitle: '工业',
-                   scoreKey: 'IND',
-                   data: null,
-               },{
+                {
+                    title: 'XLI',
+                    subTitle: '工业',
+                    scoreKey: 'IND',
+                    data: null,
+                }, {
                     title: 'XLE',
                     subTitle: '能源',
                     scoreKey: 'ENE',
@@ -123,42 +131,42 @@ export default defineComponent({
                     subTitle: '可选',
                     scoreKey: 'CND',
                     data: null,
-                },{
+                }, {
                     title: 'XLP',
                     subTitle: '消费',
                     scoreKey: 'CND',
                     data: null,
-                },{
+                }, {
                     title: 'XLF',
                     subTitle: '金融',
                     scoreKey: 'FIN',
                     data: null,
-                },{
+                }, {
                     title: 'XLV',
                     subTitle: '医疗',
                     scoreKey: 'HLT',
                     data: null,
-                },{
+                }, {
                     title: 'XLC',
                     subTitle: '通讯',
                     scoreKey: 'COM',
                     data: null,
-                },{
+                }, {
                     title: 'XLB',
                     subTitle: '材料',
                     scoreKey: 'MAT',
                     data: null,
-                },{
+                }, {
                     title: 'XLRE',
                     subTitle: '房地产',
                     scoreKey: 'REI',
                     data: null,
-                },{
+                }, {
                     title: 'XLK',
                     subTitle: '信息',
                     scoreKey: 'TEC',
                     data: null,
-                },{
+                }, {
                     title: 'XLU',
                     subTitle: '公用',
                     scoreKey: 'UTL',
@@ -192,6 +200,7 @@ export default defineComponent({
                         const item = res['data'][keys[inx]][i]
                         arr.push(item)
                         sum = sum + parseInt(item['value'])
+                        scores.heatmapData.push([lth - i - 1, keys.length - parseInt(inx) - 1, parseInt(item['value'])])
                     }
 
                     scores.data_arr.push(arr)
@@ -221,7 +230,7 @@ export default defineComponent({
             }).then(res => {
                 res['data'] = JSON.parse(JSON.stringify(res['data']).replaceAll('US', ''))
                 scores.compareCodes.forEach((code, inx) => {
-                    scores.compare[inx].data = (res['data'][code]).map(it=>it['close'])
+                    scores.compare[inx].data = (res['data'][code]).map(it => it['close'])
                 })
             })
         }
