@@ -11,7 +11,7 @@ import {
     CanvasRenderer
 } from 'echarts/renderers'
 import {
-    BarChart, PieChart, LineChart
+    BarChart, PieChart, LineChart, HeatmapChart
 } from 'echarts/charts'
 import {
     LegendComponent, TitleComponent,
@@ -24,7 +24,7 @@ use([
     LegendComponent, TitleComponent,ToolboxComponent,
     CanvasRenderer, BarChart, PieChart, LineChart,
     GridComponent, TooltipComponent, MarkPointComponent,
-    VisualMapComponent
+    VisualMapComponent, HeatmapChart
 ]);
 
 createApp(App)

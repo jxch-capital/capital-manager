@@ -1,6 +1,6 @@
 <template>
     <div class="sum-line-chart-container">
-        <v-chart :option="chartOptions"/>
+        <v-chart :option="chartOptions" class="sum-line-chart"/>
     </div>
 </template>
 
@@ -32,10 +32,10 @@ export default defineComponent({
                 show: true,
             },
             grid: {
-                top: "20%",
-                left: "10%",
-                right: "10%",
-                bottom: "10%"
+                top: "0%",
+                right: "0%",
+                bottom: "0%",
+                left: "0%",
             },
             xAxis: {
                 type: 'category',
