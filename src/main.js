@@ -11,20 +11,21 @@ import {
     CanvasRenderer
 } from 'echarts/renderers'
 import {
-    BarChart, PieChart, LineChart, HeatmapChart
+    BarChart, PieChart, LineChart, HeatmapChart,CandlestickChart,
 } from 'echarts/charts'
 import {
     LegendComponent, TitleComponent,
     GridComponent,ToolboxComponent,
     TooltipComponent, MarkPointComponent,
-    VisualMapComponent
+    VisualMapComponent,DataZoomComponent,DatasetComponent,
 } from 'echarts/components'
 
 use([
     LegendComponent, TitleComponent,ToolboxComponent,
     CanvasRenderer, BarChart, PieChart, LineChart,
     GridComponent, TooltipComponent, MarkPointComponent,
-    VisualMapComponent, HeatmapChart
+    VisualMapComponent, HeatmapChart,CandlestickChart,
+    DataZoomComponent,DatasetComponent,
 ]);
 
 createApp(App)
