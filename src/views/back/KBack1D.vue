@@ -42,7 +42,7 @@
     </div>
 </template>
 
-<script setup lang="js">
+<script>
 import {defineComponent, onBeforeMount, reactive, getCurrentInstance, onUpdated} from "vue";
 import {apis} from "@/api";
 import dayjs from "dayjs";
@@ -83,13 +83,13 @@ export default defineComponent({
             }).then(res => {
                 const dataset = res.data[params.code].map(item => [
                     dayjs(item['Date']).format(template),
-                    item['open'],
-                    item['high'],
-                    item['low'],
-                    item['close'],
-                    item['volume'],
+                    item['open'].toFixed(2),
+                    item['high'].toFixed(2),
+                    item['low'].toFixed(2),
+                    item['close'].toFixed(2),
+                    item['volume'].toFixed(2),
                     item['close'] > item['open'] ? 1 : item['close'] < item['open'] ? -1 : 0,
-                    item['close_20_ema'],
+                    item['close_20_ema'].toFixed(2),
                 ])
 
                 do {
