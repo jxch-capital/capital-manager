@@ -29,13 +29,13 @@
                     <n-form-item label="back" path="inputValue" label-placement="left" size="small">
                         <n-input v-model:value="params.back" placeholder="back"/>
                     </n-form-item>
-                    <n-button size="small" @click="start_back">开始回放</n-button>
+                    <n-button size="small" @click="start_back" :loading="params.loading">开始回放</n-button>
                     <n-divider vertical/>
                     <n-form-item label="K线数量" path="inputValue" label-placement="left" size="small">
                         <n-input v-model:value="k_data.k_number" placeholder="k_number"/>
                     </n-form-item>
                     <n-divider vertical/>
-                    <n-button size="small" @click="next">Next &rarr;</n-button>
+                    <n-button size="small" @click="next" :loading="k_data.loading">Next &rarr;</n-button>
                 </n-form>
             </n-space>
         </n-card>
@@ -63,6 +63,7 @@ export default defineComponent({
             start: dayjs(new Date()).subtract(10 * 12, 'month').format(template),
             end: dayjs(new Date()).format(template),
             back: dayjs(new Date()).subtract(3 * 12, 'month').format(template),
+            loading: false,
         })
 
         let k_data = reactive({
@@ -72,9 +73,11 @@ export default defineComponent({
             data_arr: [],
             k_length: 0,
             k_number: 150,
+            loading: false,
         })
 
         function start_back() {
+            params.loading = true
             apis.capital_service_apis.query_k_json({
                 "service_code": params.service_code,
                 "codes": [params.code],
@@ -101,16 +104,19 @@ export default defineComponent({
                 k_data.name = params.code
                 k_data.all_data_arr = dataset
                 k_data.data_arr = dataset.slice(0, k_data.index)
+                params.loading = false
             })
         }
 
         function next() {
+            k_data.loading = true
             k_data.index = k_data.index + 1
             if (k_data.index === k_data.k_length) {
                 message.success('回放结束')
             } else {
                 k_data.data_arr = k_data.all_data_arr.slice(0, k_data.index)
             }
+            k_data.loading = false
         }
 
         document.addEventListener("keyup", function (e) {
