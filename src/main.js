@@ -16,7 +16,7 @@ import {
 import {
     LegendComponent, TitleComponent,
     GridComponent,ToolboxComponent,
-    TooltipComponent, MarkPointComponent,
+    TooltipComponent, MarkPointComponent,MarkLineComponent,
     VisualMapComponent,DataZoomComponent,DatasetComponent,
 } from 'echarts/components'
 
@@ -25,7 +25,7 @@ use([
     CanvasRenderer, BarChart, PieChart, LineChart,
     GridComponent, TooltipComponent, MarkPointComponent,
     VisualMapComponent, HeatmapChart,CandlestickChart,
-    DataZoomComponent,DatasetComponent,
+    DataZoomComponent,DatasetComponent,MarkLineComponent,
 ]);
 
 createApp(App)
