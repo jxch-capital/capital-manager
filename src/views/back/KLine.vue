@@ -83,7 +83,8 @@ export default defineComponent({
                     scale: true,
                     splitArea: {
                         show: true
-                    }
+                    },
+                    position: 'right',
                 },
                 {
                     scale: true,
