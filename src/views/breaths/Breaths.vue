@@ -180,8 +180,18 @@ export default defineComponent({
             return dayjs(new Date(timestamp)).format('YY/MM/DD')
         }
 
+        function clear() {
+            scores.heatmapData = []
+            scores.data_arr = []
+            scores.sum_arr = []
+            scores.date_arr = []
+            scores.sum_arr_re = []
+            scores.date_arr_re = []
+        }
+
         function update() {
             condition.loading = true
+            clear()
             apis.capital_service_apis.query_breath_json({
                 "service_code": 'tl',
                 "start": dayjs(new Date()).subtract(condition.last, condition.cycle).format(template),
