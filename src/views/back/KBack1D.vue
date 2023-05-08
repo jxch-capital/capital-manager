@@ -14,6 +14,9 @@
                         size="small"
                         inline
                 >
+                    <n-form-item label="interval" path="inputValue" label-placement="left" size="small">
+                        <n-input v-model:value="params.interval" placeholder="interval" style="width: 100px"/>
+                    </n-form-item>
                     <n-form-item label="service" path="inputValue" label-placement="left" size="small">
                         <n-input v-model:value="params.service_code" placeholder="service_code" style="width: 100px"/>
                     </n-form-item>
@@ -63,6 +66,7 @@ export default defineComponent({
             start: dayjs(new Date()).subtract(10 * 12, 'month').format(template),
             end: dayjs(new Date()).format(template),
             back: dayjs(new Date()).subtract(3 * 12, 'month').format(template),
+            interval: '1d',
             loading: false,
         })
 
@@ -78,12 +82,28 @@ export default defineComponent({
 
         function start_back() {
             params.loading = true
+
+            if (params.back < params.start || params.back > params.end) {
+                message.warning("回放日期应该在开始日期和结束日期中间")
+                params.loading = false
+                return;
+            }
+
             apis.capital_service_apis.query_k_json({
                 "service_code": params.service_code,
                 "codes": [params.code],
                 "start": params.start,
                 "end": params.end,
+                "interval": params.interval,
             }).then(res => {
+
+                if (JSON.stringify(res.data) === '{}') {
+                    message.error("服务器无返回，可能是参数错误")
+                    params.loading = false
+                    console.log(res)
+                    return;
+                }
+
                 const dataset = res.data[params.code].map(item => [
                     dayjs(item['Date']).format(template),
                     item['open'].toFixed(2),
@@ -95,10 +115,11 @@ export default defineComponent({
                     item['close_20_ema'].toFixed(2),
                 ])
 
-                do {
+                k_data.index = dataset.findIndex(item => item[0] === params.back)
+                while (k_data.index === -1 || params.back > params.end) {
+                    params.back = dayjs(params.back).subtract(1, 'day').format(template)
                     k_data.index = dataset.findIndex(item => item[0] === params.back)
-                    params.back = dayjs(params.back).add(1, 'day').format(template)
-                } while (k_data.index === -1)
+                }
 
                 k_data.k_length = dataset.length
                 k_data.name = params.code
