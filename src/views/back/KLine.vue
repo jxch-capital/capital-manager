@@ -11,10 +11,15 @@ export default defineComponent({
         name: String,
         dataArr: Array,
         dataZoom: Number,
+        isSplit: {
+            type: Boolean,
+            default: false,
+        },
+        splitTime: Array,
     },
 
     setup(props) {
-        const {name, dataArr, dataZoom} = toRefs(props)
+        const {name, dataArr, dataZoom, isSplit, splitTime} = toRefs(props)
 
         const upColor = '#00da3c';
         const upBorderColor = '#008F28';
@@ -61,8 +66,8 @@ export default defineComponent({
                     type: 'category',
                     boundaryGap: false,
                     // inverse: true,
-                    axisLine: { onZero: false },
-                    splitLine: { show: false },
+                    axisLine: {onZero: false},
+                    splitLine: {show: false},
                     min: 'dataMin',
                     max: 'dataMax'
                 },
@@ -70,10 +75,10 @@ export default defineComponent({
                     type: 'category',
                     gridIndex: 1,
                     boundaryGap: false,
-                    axisLine: { onZero: false },
-                    axisTick: { show: false },
-                    splitLine: { show: false },
-                    axisLabel: { show: false },
+                    axisLine: {onZero: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false},
+                    axisLabel: {show: false},
                     min: 'dataMin',
                     max: 'dataMax'
                 }
@@ -90,10 +95,10 @@ export default defineComponent({
                     scale: true,
                     gridIndex: 1,
                     splitNumber: 2,
-                    axisLabel: { show: false },
-                    axisLine: { show: false },
-                    axisTick: { show: false },
-                    splitLine: { show: false }
+                    axisLabel: {show: false},
+                    axisLine: {show: false},
+                    axisTick: {show: false},
+                    splitLine: {show: false}
                 }
             ],
             dataZoom: [
@@ -145,7 +150,7 @@ export default defineComponent({
                     encode: {
                         x: 0,
                         y: [1, 4, 3, 2]
-                    }
+                    },
                 },
                 {
                     name: 'Volumn',
@@ -160,7 +165,7 @@ export default defineComponent({
                         x: 0,
                         y: 5
                     }
-                },{
+                }, {
                     name: "SMA20",
                     type: "line",
                     encode: {

@@ -1,6 +1,6 @@
 import {Component, h} from "vue";
 import {NIcon} from "naive-ui";
-import {Calculator, TrendingUp, PlaySkipBackOutline} from '@vicons/ionicons5'
+import {Calculator, TrendingUp, PlaySkipBackOutline, PlaySkipBackCircleOutline} from '@vicons/ionicons5'
 import {ChartLineSmooth, ToolsAlt} from '@vicons/carbon'
 
 function renderIcon(icon: Component) {
@@ -10,12 +10,19 @@ function renderIcon(icon: Component) {
 
 export const index_routers = [
     {
-        path: '/k_back_1d',
+        path: '/k_back_m',
+        label: "日内回放",
+        name: 'k_back_m',
+        key: 'k_back_m',
+        icon: renderIcon(PlaySkipBackCircleOutline),
+        component: () => import('vv/back/KBackM.vue'),
+    }, {
+        path: '/k_back_d',
         label: "日线回放",
-        name: 'k_back_1d',
-        key: 'k_back_1d',
+        name: 'k_back_d',
+        key: 'k_back_d',
         icon: renderIcon(PlaySkipBackOutline),
-        component: () => import('vv/back/KBack1D.vue'),
+        component: () => import('vv/back/KBackD.vue'),
     }, {
         path: '/breaths',
         label: "美股市场呼吸图",

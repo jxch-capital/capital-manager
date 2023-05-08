@@ -53,7 +53,7 @@ import KLine from "vv/back/KLine.vue";
 import {useMessage} from 'naive-ui'
 
 export default defineComponent({
-    name: "KBack1D",
+    name: "KBackD",
     components: {KLine},
 
     setup() {
