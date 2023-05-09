@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs, toRaw} from "vue";
+import {defineComponent, reactive, toRefs, toRaw, watch} from "vue";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -12,10 +12,6 @@ export default defineComponent({
         name: String,
         dataArr: Array,
         dataZoom: Number,
-        isSplit: {
-            type: Boolean,
-            default: false,
-        },
         splitTime: Array,
     },
 
@@ -29,7 +25,7 @@ export default defineComponent({
         const crossColor = 'gray';
         const crossBorderColor = 'gray';
 
-        const options = {
+        const chartOptions = reactive({
             dataset: {
                 source: dataArr
             },
@@ -189,20 +185,20 @@ export default defineComponent({
                     },
                 }
             ]
-        }
+        })
 
-        if (toRaw(props.isSplit)) {
-            (toRaw(props.splitTime)).forEach((value, index) => {
-                options.series[0].markPoint.data.push({
-                    name: 'Mark',
-                    coord: [value[0], value[1] + 1],
-                    value: dayjs(value[0].replace('\n', ' ')).format('MM/DD\nHH:mm'),
-                    itemStyle: {color: 'rgba(41,60,85,0.7)',}
+        watch(() => props.splitTime,
+            (newSplitTime) => {
+                toRaw(props.splitTime).forEach((value, index) => {
+                    chartOptions.series[0].markPoint.data.push({
+                        name: 'Mark',
+                        coord: [value[0], value[1] + 1],
+                        value: dayjs(value[0].replace('\n', ' ')).format('MM/DD\nHH:mm'),
+                        itemStyle: {color: 'rgba(41,60,85,0.7)',}
+                    })
                 })
-            })
-        }
-
-        const chartOptions = reactive(options)
+            }
+        )
 
         return {
             chartOptions
