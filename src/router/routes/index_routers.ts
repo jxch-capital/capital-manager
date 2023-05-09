@@ -1,7 +1,7 @@
 import {Component, h} from "vue";
 import {NIcon} from "naive-ui";
 import {Calculator, TrendingUp, PlaySkipBackOutline, PlaySkipBackCircleOutline} from '@vicons/ionicons5'
-import {ChartLineSmooth, ToolsAlt} from '@vicons/carbon'
+import {ChartLineSmooth, ToolsAlt, HeatMap03} from '@vicons/carbon'
 
 function renderIcon(icon: Component) {
     return () => h(NIcon, null, {default: () => h(icon)})
@@ -28,7 +28,7 @@ export const index_routers = [
         label: "美股市场呼吸图",
         name: 'breaths',
         key: 'breaths',
-        icon: renderIcon(ChartLineSmooth),
+        icon: renderIcon(HeatMap03),
         component: () => import('vv/breaths/Breaths.vue'),
     }, {
         path: '/sectors-us',
