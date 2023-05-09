@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const capital_service_api = axios.create({
-    baseURL: 'http://jiangxicheng.xyz:15000/',
+    baseURL: '/capital_service_api',
     timeout: 30000,
     headers: {'Accept': 'application/json', 'Content-Type': 'application/json;charset=utf-8'}
 })
