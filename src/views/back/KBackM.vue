@@ -1,7 +1,7 @@
 <template>
     <div style="height: 100%;">
         <n-card size="small" hoverable style="height: 88%">
-            <k-line :name="k_data.name" :data-arr="k_data.data_arr"
+            <k-line :name="k_data.name" :data-arr="k_data.data_arr" :is-split="true" :split-time="k_data.split_time"
                     :data-zoom="100 - Math.floor(100 * k_data.k_number / k_data.index)"/>
         </n-card>
         <n-card>
