@@ -1,7 +1,7 @@
 import {Component, h} from "vue";
 import {NIcon} from "naive-ui";
 import {Calculator, TrendingUp, PlaySkipBackOutline, PlaySkipBackCircleOutline} from '@vicons/ionicons5'
-import {ChartLineSmooth, ToolsAlt, HeatMap03} from '@vicons/carbon'
+import {ChartMultiLine, ToolsAlt, HeatMap03} from '@vicons/carbon'
 
 function renderIcon(icon: Component) {
     return () => h(NIcon, null, {default: () => h(icon)})
@@ -10,6 +10,13 @@ function renderIcon(icon: Component) {
 
 export const index_routers = [
     {
+        path: '/compare',
+        label: "趋势比较",
+        name: 'compare',
+        key: 'compare',
+        icon: renderIcon(ChartMultiLine),
+        component: () => import('vv/compare/Compare.vue'),
+    },{
         path: '/k_back_m',
         label: "日内回放",
         name: 'k_back_m',
