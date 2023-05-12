@@ -42,7 +42,8 @@ export default defineComponent({
                     params.sort(function (a, b) {
                         return Number(b.value[1]) - Number(a.value[1])
                     });
-                    return '<h3>' + params[0].axisValue.replace('\n', ' ') + '</h3>' +
+                    const date = params[0].axisValue.replace('\n', '/')
+                    return '<h3>' + date + ' ('+ dayjs(date).day() +')' + '</h3>' +
                         '<table cellspacing="0" cellpadding=""><tr>' + params.map(item => '<td>' + item.marker + '</td><td>' +
                             item.seriesName.padEnd(20) + '</td><td style="background: ' + td_background(item.value[1]) + '">' + item.value[1] + '</td>').join('</tr><tr>') +
                         '</tr></table>'
