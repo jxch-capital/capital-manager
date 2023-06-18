@@ -36,12 +36,14 @@ import {apis} from "@/api";
 import DateSelector from "cc/DateSelector.vue";
 import dayjs from "dayjs";
 import StockPoolScatterChart from "vv/bubble/StockPoolScatterChart.vue";
+import {useMessage} from "naive-ui";
 
 export default defineComponent({
   name: "Bubble",
   components: {StockPoolScatterChart, DateSelector},
 
   setup() {
+    const message = useMessage()
     const template = "YYYY-MM-DD"
     const condition = reactive({
       last: 3,
@@ -69,6 +71,9 @@ export default defineComponent({
         condition.stockPool = res['data']
         const keys = Object.keys(condition.stockPool)
         stockPoolHandleSelect(keys[keys.length - 1])
+      }).catch((e)=> {
+        console.log(e)
+        message.warning('请检查网络并稍后重试，或查看控制台报错信息：' + e['message'])
       })
     }
 
@@ -80,6 +85,10 @@ export default defineComponent({
         "end": dayjs(new Date()).format(template)
       }).then((res) => {
         stockChart.kLines = res['data']
+      }).catch((e)=> {
+        console.log(e)
+        message.warning('请检查网络并稍后重试，或查看控制台报错信息')
+      }).finally(() => {
         condition.loading = false
       })
     }
@@ -90,7 +99,7 @@ export default defineComponent({
       update()
     }
 
-    onBeforeMount(() => queryStockPool())
+    queryStockPool()
 
     return {
       stockPoolOptionsComputed,
