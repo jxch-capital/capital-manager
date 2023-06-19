@@ -11,19 +11,19 @@ function renderIcon(icon: Component) {
 
 export const index_routers = [
     {
+        path: '/market-bubble',
+        label: "市场气泡图",
+        name: 'market-bubble',
+        key: 'market-bubble',
+        icon: renderIcon(BubbleChartFilled),
+        component: () => import('vv/bubble/MarketBubble.vue'),
+    },{
         path: '/abnormal-bubble',
         label: "异动气泡图",
         name: 'abnormal-bubble',
         key: 'abnormal-bubble',
         icon: renderIcon(ChartBubblePacked),
         component: () => import('vv/bubble/AbnormalBubble.vue'),
-    },{
-        path: '/bubble',
-        label: "市场气泡图",
-        name: 'bubble',
-        key: 'bubble',
-        icon: renderIcon(BubbleChartFilled),
-        component: () => import('vv/bubble/MarketBubble.vue'),
     },{
         path: '/compare',
         label: "趋势比较",

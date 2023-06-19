@@ -5,12 +5,14 @@
         <n-space>
           <date-selector :condition="condition"/>
           <n-form-item label="中期百分比：" size="small" label-placement="left">
-            <n-input-number size="small" v-model:value="stockChart.midPercent" clearable placeholder="last"
-                            style="width: 110px"/>
+            <n-slider style="width: 100px" :default-value="stockChart.midPercent" :step="1"
+                      :min="10" :max="80" v-model:value="stockChart.midPercent"
+                      :format-tooltip="formatPercentTooltip"/>
           </n-form-item>
           <n-form-item label="短期百分比：" size="small" label-placement="left">
-            <n-input-number size="small" v-model:value="stockChart.shortPercent" clearable placeholder="last"
-                            style="width: 110px"/>
+            <n-slider style="width: 100px" :default-value="stockChart.shortPercent" :step="1"
+                      :min="1" :max="50" v-model:value="stockChart.shortPercent"
+                      :format-tooltip="formatPercentTooltip"/>
           </n-form-item>
           <n-dropdown size="small" trigger="hover" :options="stockPoolOptionsComputed" @select="stockPoolHandleSelect">
             <n-button size="small" :loading="condition.loading" @click="update">
@@ -25,7 +27,7 @@
     </n-card>
     <n-card size="small" hoverable style="height: 92%">
       <market-scatter-chart :k-lines="stockChart.kLines"
-                                :mid-percent="stockChart.midPercent" :short-percent="stockChart.shortPercent"/>
+                            :mid-percent="stockChart.midPercent" :short-percent="stockChart.shortPercent"/>
     </n-card>
   </div>
 </template>
@@ -71,7 +73,7 @@ export default defineComponent({
         condition.stockPool = res['data']
         const keys = Object.keys(condition.stockPool)
         stockPoolHandleSelect(keys[keys.length - 1])
-      }).catch((e)=> {
+      }).catch((e) => {
         console.log(e)
         message.warning('请检查网络并稍后重试，或查看控制台报错信息：' + e['message'])
       })
@@ -85,7 +87,7 @@ export default defineComponent({
         "end": dayjs(new Date()).format(template)
       }).then((res) => {
         stockChart.kLines = res['data']
-      }).catch((e)=> {
+      }).catch((e) => {
         console.log(e)
         message.warning('请检查网络并稍后重试，或查看控制台报错信息')
       }).finally(() => {
@@ -101,9 +103,14 @@ export default defineComponent({
 
     queryStockPool()
 
+    function formatPercentTooltip(value) {
+      return `${value}%`
+    }
+
     return {
       stockPoolOptionsComputed,
       stockPoolHandleSelect,
+      formatPercentTooltip,
       condition,
       update,
       stockChart,

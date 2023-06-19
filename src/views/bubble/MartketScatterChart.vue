@@ -26,7 +26,7 @@ export default defineComponent({
       return `hsl(${hue}, 100%, 50%)`;
     }
 
-    watch(() => props.kLines, (newData) => {
+    function update(newData) {
       const rawData =  toRaw(newData)
       points.arr = Object.keys(rawData).map((key => {
         const f_open = rawData[key][0]['open']
@@ -48,6 +48,18 @@ export default defineComponent({
           zPercent: s_p,
         }
       }))
+    }
+
+    watch(() => props.kLines, (newData) => {
+      update(newData)
+    })
+
+    watch(() => props.midPercent, (newData) => {
+      update(props.kLines)
+    })
+
+    watch(() => props.shortPercent, (newData) => {
+      update(props.kLines)
     })
 
     return {
