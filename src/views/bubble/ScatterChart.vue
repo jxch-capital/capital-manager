@@ -3,35 +3,28 @@
 </template>
 
 <script>
-import {defineComponent, getCurrentInstance, onMounted, reactive, toRaw, watch} from "vue";
+import {defineComponent, getCurrentInstance, onMounted, reactive, toRaw, toRefs, watch} from "vue";
 
 export default defineComponent({
   name: "ScatterChart",
   props: {
     pointsArr: Array,
+    xTip: String,
+    yTip: String,
+    zTip: String,
+    xMax: Number,
+    yMax: Number,
+    zMax: Number,
+    enableDashed: {
+      type: Boolean,
+      default: true
+    }
   },
   setup(props) {
-
-    function getShortColor(value) {
-      const max = 20;
-      const min = -20;
+    function getColor(value, max) {
+      const min = -max;
       value = Math.min(Math.max(value, min), max);
       const hue = ((value - min) / (max - min)) * 120;
-      return `hsl(${hue}, 100%, 50%)`;
-    }
-
-    function getMidColor(value) {
-      const max = 40;
-      const min = -40;
-      value = Math.min(Math.max(value, min), max);
-      const hue = ((value - min) / (max - min)) * 120;
-      return `hsl(${hue}, 100%, 50%)`;
-    }
-
-    function getLongColor(value) {
-      value = Math.max(value, -100);
-      value = Math.min(value, 100);
-      let hue = (value + 100) / 2 * 1.2; // 计算色调
       return `hsl(${hue}, 100%, 50%)`;
     }
 
@@ -62,14 +55,16 @@ export default defineComponent({
       tooltip: {
         trigger: 'item',
         formatter: function (params) {
-          const shortPercent = toRaw(mates.series)[params['seriesIndex']]['shortPercent']
+          const zPercent = toRaw(mates.series)[params['seriesIndex']]['zPercent']
+          const xPercent = toRaw(mates.series)[params['seriesIndex']]['xPercent'] ? toRaw(mates.series)[params['seriesIndex']]['xPercent'] : params['value'][0]
+          const yPercent = toRaw(mates.series)[params['seriesIndex']]['yPercent'] ? toRaw(mates.series)[params['seriesIndex']]['yPercent'] : params['value'][1]
           const closeArr = toRaw(mates.series)[params['seriesIndex']]['closeArr']
           const code = toRaw(mates.series)[params['seriesIndex']]['code']
           return params['marker'] + params['seriesName'] + ' (' + code + ')' + '<br><table>'
               + '<tr><td>Close</td><td style="text-align: right;padding-left: 6px;">' + closeArr[closeArr.length - 1].toFixed(2) + ' </td></tr>'
-              + '<tr><td>Short</td><td style="text-align: right;padding-left: 6px; background-color: ' + getShortColor(shortPercent) + '">' + shortPercent + ' </td></tr>'
-              + '<tr><td>Mid</td><td style="text-align: right;padding-left: 6px; background-color: ' + getMidColor(params['value'][0]) + '">' + params['value'][0] + ' </td></tr>'
-              + '<tr><td>Long</td><td style="text-align: right;padding-left: 6px; background-color: ' + getLongColor(params['value'][1]) + '">' + params['value'][1] + ' </td></tr>'
+              + `<tr><td>${toRaw(props.zTip)}</td><td style="text-align: right;padding-left: 6px; background-color: ` + getColor(zPercent, toRaw(props.zMax)) + '">' + zPercent + ' </td></tr>'
+              + `<tr><td>${toRaw(props.xTip)}</td><td style="text-align: right;padding-left: 6px; background-color: ` + getColor(xPercent, toRaw(props.xMax)) + '">' + xPercent + ' </td></tr>'
+              + `<tr><td>${toRaw(props.yTip)}</td><td style="text-align: right;padding-left: 6px; background-color: ` + getColor(yPercent, toRaw(props.yMax)) + '">' + yPercent + ' </td></tr>'
               + '</table>' + closeSvg(closeArr, 90, 20, 'black', 0.6)
         }
       },
@@ -100,7 +95,9 @@ export default defineComponent({
           type: 'scatter',
           name: point['name'],
           code: point['code'],
-          shortPercent: point['shortPercent'],
+          zPercent: point['zPercent'],
+          xPercent: point['xPercent'],
+          yPercent: point['yPercent'],
           closeArr: point['closeArr'],
           point: point,
           symbolSize: point['size'],
@@ -110,65 +107,66 @@ export default defineComponent({
           }
         }
       })
-
-      mates.series.push({
-        type: 'scatter',
-        data: [],
-        markLine: {
-          symbol: 'none',
-          label: {
-            show: false
-          },
-          lineStyle: {
-            type: 'dashed'
-          },
-          data: [
-            {
-              xAxis: 0
+      if (toRaw(props.enableDashed)) {
+        mates.series.push({
+          type: 'scatter',
+          data: [],
+          markLine: {
+            symbol: 'none',
+            label: {
+              show: false
             },
-            {
-              yAxis: 0
+            lineStyle: {
+              type: 'dashed'
             },
-            {
-              xAxis: 50
-            },
-            {
-              yAxis: 50
-            },
-            {
-              xAxis: -50
-            },
-            {
-              yAxis: -50
-            },
-            {
-              xAxis: 100
-            },
-            {
-              yAxis: 100
-            },
-            {
-              xAxis: -100
-            },
-            {
-              yAxis: -100
-            },
-            {
-              xAxis: 20
-            },
-            {
-              yAxis: 20
-            },
-            {
-              xAxis: -20
-            },
-            {
-              yAxis: -20
-            },
-          ],
-          z: 0,
-        }
-      })
+            data: [
+              {
+                xAxis: 0
+              },
+              {
+                yAxis: 0
+              },
+              {
+                xAxis: 50
+              },
+              {
+                yAxis: 50
+              },
+              {
+                xAxis: -50
+              },
+              {
+                yAxis: -50
+              },
+              {
+                xAxis: 100
+              },
+              {
+                yAxis: 100
+              },
+              {
+                xAxis: -100
+              },
+              {
+                yAxis: -100
+              },
+              {
+                xAxis: 20
+              },
+              {
+                yAxis: 20
+              },
+              {
+                xAxis: -20
+              },
+              {
+                yAxis: -20
+              },
+            ],
+            z: 0,
+          }
+        })
+      }
       chartOptions.series = mates.series
       chartDemo.setOption(chartOptions, true)
     })

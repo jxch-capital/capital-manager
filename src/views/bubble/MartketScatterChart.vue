@@ -1,12 +1,12 @@
 <template>
-  <scatter-chart :points-arr="points.arr" />
+  <scatter-chart :points-arr="points.arr" y-tip="Long" x-tip="Mid" z-tip="Short" :x-max="40" :y-max="100" :z-max="20"/>
 </template>
 
 <script>
 import {defineComponent, reactive, toRaw, toRefs, watch} from "vue";
 import ScatterChart from "vv/bubble/ScatterChart.vue";
 export default defineComponent({
-  name: "StockPoolScatterChart",
+  name: "MarketScatterChart",
   components: {ScatterChart},
   props: {
     kLines: Object,
@@ -26,7 +26,7 @@ export default defineComponent({
       return `hsl(${hue}, 100%, 50%)`;
     }
 
-    watch(() => props.kLines, (newData) => {
+    function update(newData) {
       const rawData =  toRaw(newData)
       points.arr = Object.keys(rawData).map((key => {
         const f_open = rawData[key][0]['open']
@@ -45,9 +45,21 @@ export default defineComponent({
           name: key,
           code: rawData[key][0]['code'],
           closeArr: rawData[key].map((item) => item['close']),
-          shortPercent: s_p,
+          zPercent: s_p,
         }
       }))
+    }
+
+    watch(() => props.kLines, (newData) => {
+      update(newData)
+    })
+
+    watch(() => props.midPercent, (newData) => {
+      update(props.kLines)
+    })
+
+    watch(() => props.shortPercent, (newData) => {
+      update(props.kLines)
     })
 
     return {

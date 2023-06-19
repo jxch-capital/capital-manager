@@ -1,7 +1,7 @@
 import {Component, h} from "vue";
 import {NIcon} from "naive-ui";
 import {Calculator, TrendingUp, PlaySkipBackOutline, PlaySkipBackCircleOutline} from '@vicons/ionicons5'
-import {ChartMultiLine, ToolsAlt, HeatMap03} from '@vicons/carbon'
+import {ChartMultiLine, ToolsAlt, HeatMap03, ChartBubblePacked} from '@vicons/carbon'
 import {BubbleChartFilled} from '@vicons/material'
 
 function renderIcon(icon: Component) {
@@ -11,12 +11,19 @@ function renderIcon(icon: Component) {
 
 export const index_routers = [
     {
-        path: '/bubble',
+        path: '/market-bubble',
         label: "市场气泡图",
-        name: 'bubble',
-        key: 'bubble',
+        name: 'market-bubble',
+        key: 'market-bubble',
         icon: renderIcon(BubbleChartFilled),
-        component: () => import('vv/bubble/Bubble.vue'),
+        component: () => import('vv/bubble/MarketBubble.vue'),
+    },{
+        path: '/abnormal-bubble',
+        label: "异动气泡图",
+        name: 'abnormal-bubble',
+        key: 'abnormal-bubble',
+        icon: renderIcon(ChartBubblePacked),
+        component: () => import('vv/bubble/AbnormalBubble.vue'),
     },{
         path: '/compare',
         label: "趋势比较",
