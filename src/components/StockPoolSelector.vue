@@ -27,23 +27,19 @@ export default defineComponent({
     kLines: Object
   },
   emits: ['update:kLines'],
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const {autoSelector} = toRefs(props)
     const message = useMessage()
     const template = "YYYY-MM-DD"
     const condition = reactive({
-      last: 3,
-      cycle: 'month',
+      last: 1,
+      cycle: 'year',
       stockPool: [],
       loading: false,
       stockPoolSelectLabel: '',
       stockPoolSelectKey: '',
       kLines: '',
     })
-
-    function formatAbPercentTooltip(value) {
-      return `${value}日`
-    }
 
     const stockPoolOptionsComputed = computed(() => {
       const rawStockPoolOptions = toRaw(condition.stockPool)
@@ -57,7 +53,7 @@ export default defineComponent({
         condition.stockPool = res['data']
         const keys = Object.keys(condition.stockPool)
         stockPoolHandleSelect(keys[keys.length - 1])
-      }).catch((e)=> {
+      }).catch((e) => {
         console.log(e)
         message.warning('请检查网络并稍后重试，或查看控制台报错信息：' + e['message'])
       })
@@ -72,9 +68,10 @@ export default defineComponent({
       }).then((res) => {
         condition.kLines = res['data']
         emit('update:kLines', condition.kLines)
-      }).catch((e)=> {
+        message.success(condition.stockPoolSelectLabel + '股票池加载完成')
+      }).catch((e) => {
         console.log(e)
-        message.warning('请检查网络并稍后重试，或查看控制台报错信息')
+        message.warning('请检查网络并稍后重试，或查看控制台报错信息：' + e['message'])
       }).finally(() => {
         condition.loading = false
       })
@@ -83,15 +80,14 @@ export default defineComponent({
     function stockPoolHandleSelect(key) {
       condition.stockPoolSelectKey = key
       condition.stockPoolSelectLabel = condition.stockPool[key]['alias'] + ` (${condition.stockPool[key]['codes'].length})`
-      update()
+      if (toRaw(props.autoSelector)) {
+        update()
+      }
     }
 
-    if (autoSelector) {
-      queryStockPool()
-    }
+    queryStockPool()
 
     return {
-      formatAbPercentTooltip,
       stockPoolOptionsComputed,
       stockPoolHandleSelect,
       update,
