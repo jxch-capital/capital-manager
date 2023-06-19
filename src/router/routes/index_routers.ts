@@ -3,6 +3,7 @@ import {NIcon} from "naive-ui";
 import {Calculator, TrendingUp, PlaySkipBackOutline, PlaySkipBackCircleOutline} from '@vicons/ionicons5'
 import {ChartMultiLine, ToolsAlt, HeatMap03, ChartBubblePacked} from '@vicons/carbon'
 import {BubbleChartFilled} from '@vicons/material'
+import {DeveloperBoardSearch20Regular}  from '@vicons/fluent'
 
 function renderIcon(icon: Component) {
     return () => h(NIcon, null, {default: () => h(icon)})
@@ -11,6 +12,13 @@ function renderIcon(icon: Component) {
 
 export const index_routers = [
     {
+        path: '/k-similar-search',
+        label: "相似K线搜索引擎",
+        name: 'k-similar-search',
+        key: 'k-similar-search',
+        icon: renderIcon(DeveloperBoardSearch20Regular),
+        component: () => import('vv/search/KSimilarSearch.vue'),
+    },{
         path: '/market-bubble',
         label: "市场气泡图",
         name: 'market-bubble',
