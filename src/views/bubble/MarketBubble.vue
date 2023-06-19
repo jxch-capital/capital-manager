@@ -24,7 +24,7 @@
       </n-space>
     </n-card>
     <n-card size="small" hoverable style="height: 92%">
-      <stock-pool-scatter-chart :k-lines="stockChart.kLines"
+      <market-scatter-chart :k-lines="stockChart.kLines"
                                 :mid-percent="stockChart.midPercent" :short-percent="stockChart.shortPercent"/>
     </n-card>
   </div>
@@ -35,12 +35,12 @@ import {computed, defineComponent, onBeforeMount, reactive, toRaw} from 'vue'
 import {apis} from "@/api";
 import DateSelector from "cc/DateSelector.vue";
 import dayjs from "dayjs";
-import StockPoolScatterChart from "vv/bubble/StockPoolScatterChart.vue";
+import MarketScatterChart from "vv/bubble/MartketScatterChart.vue";
 import {useMessage} from "naive-ui";
 
 export default defineComponent({
-  name: "Bubble",
-  components: {StockPoolScatterChart, DateSelector},
+  name: "MarketBubble",
+  components: {MarketScatterChart, DateSelector},
 
   setup() {
     const message = useMessage()
