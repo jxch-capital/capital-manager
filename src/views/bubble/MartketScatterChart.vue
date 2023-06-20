@@ -1,10 +1,56 @@
 <template>
-  <scatter-chart :points-arr="points.arr" y-tip="Long" x-tip="Mid" z-tip="Short" :x-max="40" :y-max="100" :z-max="20"/>
+  <div style="height: 100%; width: 100%; padding: 0;">
+    <n-space :vertical="false" size="small" justify="space-between">
+      <n-space size="small">
+        <n-tr size="small">
+          <td title="上涨概率" style="background-color: gainsboro">⬆</td>
+          <td :title="`P(short>${th.short})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(short>${th.short})`))}">{{ expressionProbability(`P(short>${th.short})`) }}</td>
+          <td :title="`P(mid>${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(mid>${th.mid})`))}">{{ expressionProbability(`P(mid>${th.mid})`) }}</td>
+          <td :title="`P(long>${th.long})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(long>${th.long})`))}">{{ expressionProbability(`P(long>${th.long})`) }}</td>
+          <td :title="`P(mid>${th.mid}|short>${th.short})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(mid>${th.mid}|short>${th.short})`))}">{{ expressionProbability(`P(mid>${th.mid}|short>${th.short})`) }}</td>
+          <td :title="`P(long>${th.long}|mid>${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(long>${th.long}|mid>${th.mid})`))}">{{ expressionProbability(`P(long>${th.long}|mid>${th.mid})`) }}</td>
+          <td :title="`P(long>${th.long}|short>${th.short},mid>${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(long>${th.long}|short>${th.short},mid>${th.mid})`))}">{{ expressionProbability(`P(long>${th.long}|short>${th.short},mid>${th.mid})`) }}</td>
+          <td title="下跌概率" style="background-color: gainsboro">⬇</td>
+          <td :title="`P(short<-${th.short})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(short<-${th.short})`))}">{{ expressionProbability(`P(short<-${th.short})`) }}</td>
+          <td :title="`P(mid<-${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(mid<-${th.mid})`))}">{{ expressionProbability(`P(mid<-${th.mid})`) }}</td>
+          <td :title="`P(long<-${th.long})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(long<-${th.long})`))}">{{ expressionProbability(`P(long<-${th.long})`) }}</td>
+          <td :title="`P(mid<-${th.mid}|short<-${th.short})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(mid<-${th.mid}|short<-${th.short})`))}">{{ expressionProbability(`P(mid<-${th.mid}|short<-${th.short})`) }}</td>
+          <td :title="`P(long<-${th.long}|mid<-${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(long<-${th.long}|mid<-${th.mid})`))}">{{ expressionProbability(`P(long<-${th.long}|mid<-${th.mid})`) }}</td>
+          <td :title="`P(long<-${th.long}|short<-${th.short},mid<-${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(long<-${th.long}|short<-${th.short},mid<-${th.mid})`))}">{{ expressionProbability(`P(long<-${th.long}|short<-${th.short},mid<-${th.mid})`) }}</td>
+          <td title="波动概率" style="background-color: gainsboro">~</td>
+          <td :title="`P(short<${th.short},short>-${th.short})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(short<${th.short},short>-${th.short})`))}">{{ expressionProbability(`P(short<${th.short},short>-${th.short})`) }}</td>
+          <td :title="`P(mid<${th.mid},mid>-${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(mid<${th.mid},mid>-${th.mid})`))}">{{ expressionProbability(`P(mid<${th.mid},mid>-${th.mid})`) }}</td>
+          <td :title="`P(long<${th.long},long>-${th.long})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(long<${th.long},long>-${th.long})`))}">{{ expressionProbability(`P(long<${th.long},long>-${th.long})`) }}</td>
+          <td :title="`P(mid<${th.mid},mid>-${th.mid}|short<${th.short},short>-${th.short})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(mid<${th.mid},mid>-${th.mid}|short<${th.short},short>-${th.short})`))}">{{ expressionProbability(`P(mid<${th.mid},mid>-${th.mid}|short<${th.short},short>-${th.short})`) }}</td>
+          <td :title="`P(long<${th.long},long>-${th.long}|mid<${th.mid},mid>-${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(long<${th.long},long>-${th.long}|mid<${th.mid},mid>-${th.mid})`))}">{{ expressionProbability(`P(long<${th.long},long>-${th.long}|mid<${th.mid},mid>-${th.mid})`) }}</td>
+          <td :title="`P(long<${th.long},long>-${th.long}|mid<${th.mid},mid>-${th.mid},short<${th.short},short>-${th.short})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(long<${th.long},long>-${th.long}|mid<${th.mid},mid>-${th.mid},short<${th.short},short>-${th.short})`))}">{{ expressionProbability(`P(long<${th.long},long>-${th.long}|mid<${th.mid},mid>-${th.mid},short<${th.short},short>-${th.short})`) }}</td>
+          <td title="重要概率" style="background-color: gainsboro">*</td>
+          <td :title="`P(short>${th.short},mid>${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(short>${th.short},mid>${th.mid})`))}">{{ expressionProbability(`P(short>${th.short},mid>${th.mid})`) }}</td>
+          <td :title="`P(short>${th.short},mid>${th.mid},long>${th.long})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(short>${th.short},mid>${th.mid},long>${th.long})`))}">{{ expressionProbability(`P(short>${th.short},mid>${th.mid},long>${th.long})`) }}</td>
+          <td :title="`P(short<-${th.short},mid<-${th.mid},long<-${th.long})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(short<-${th.short},mid<-${th.mid},long<-${th.long})`))}">{{ expressionProbability(`P(short<-${th.short},mid<-${th.mid},long<-${th.long})`) }}</td>
+        </n-tr>
+      </n-space>
+      <n-space size="small">
+        <n-tr size="small">
+          <n-td size="small" :title="points.expression" :style="{'background-color': getBKColor(expressionProbabilityVal(points.expression))}">{{ expressionProbability(points.expression) }}</n-td>
+          <n-td size="small" ><n-input v-model:value="points.expression" style="width: 200px" size="small" placeholder="P(..|..)"/></n-td>
+          <n-td size="small" ><n-input v-model:value="th.short" style="width: 40px" size="small"/></n-td>
+          <n-td size="small" ><n-input v-model:value="th.mid" style="width: 40px" size="small"/></n-td>
+          <n-td size="small" ><n-input v-model:value="th.long" style="width: 40px" size="small"/></n-td>
+        </n-tr>
+      </n-space>
+    </n-space>
+    <scatter-chart :points-arr="points.arr" y-tip="Long" x-tip="Mid" z-tip="Short" :x-max="40" :y-max="100"
+                   :z-max="20"/>
+  </div>
 </template>
 
 <script>
 import {defineComponent, reactive, toRaw, toRefs, watch} from "vue";
 import ScatterChart from "vv/bubble/ScatterChart.vue";
+import {calculateProbability} from "vv/search/probability"
+import chroma from 'chroma-js'
+
 export default defineComponent({
   name: "MarketScatterChart",
   components: {ScatterChart},
@@ -16,7 +62,13 @@ export default defineComponent({
   setup(props) {
     const {kLines, midPercent, shortPercent} = toRefs(props)
     const points = reactive({
-      arr: []
+      arr: [],
+      expression: 'P(short>0)',
+    })
+    const th = reactive({
+      short: 0.1,
+      mid: 1,
+      long: 5,
     })
 
     function getColor(value) {
@@ -27,7 +79,7 @@ export default defineComponent({
     }
 
     function update(newData) {
-      const rawData =  toRaw(newData)
+      const rawData = toRaw(newData)
       points.arr = Object.keys(rawData).map((key => {
         const f_open = rawData[key][0]['open']
         const l_close = rawData[key][rawData[key].length - 1]['close']
@@ -46,6 +98,9 @@ export default defineComponent({
           code: rawData[key][0]['code'],
           closeArr: rawData[key].map((item) => item['close']),
           zPercent: s_p,
+          mid: m_p,
+          long: l_p,
+          short: s_p,
         }
       }))
     }
@@ -62,8 +117,38 @@ export default defineComponent({
       update(props.kLines)
     })
 
+    const chroma_scale_green = chroma.scale(['#F0FA18', '#18FA26'])
+    const chroma_scale_red = chroma.scale(['#FF6546', '#F0FA18'])
+
+    function getBKColor(val) {
+      if (val >= 50) {
+        return chroma_scale_green((val - 50) / 50).hex()
+      } else {
+        return chroma_scale_red(val / 50).hex()
+      }
+    }
+
+    function expressionProbability(expression) {
+      try{
+        return `${(calculateProbability(toRaw(points.arr), expression) * 100).toFixed(2)}%`
+      } catch (e) {
+        return '0%'
+      }
+    }
+    function expressionProbabilityVal(expression) {
+      try {
+        return calculateProbability(toRaw(points.arr), expression) * 100
+      }catch (e) {
+        return 'white'
+      }
+    }
+
     return {
+      expressionProbability,
+      expressionProbabilityVal,
+      getBKColor,
       points,
+      th,
     }
   }
 })

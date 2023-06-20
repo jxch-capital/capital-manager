@@ -43,8 +43,8 @@ export default defineComponent({
   setup() {
     const stockChart = reactive({
       kLines: '',
-      midPercent: 40,
-      shortPercent: 15,
+      midPercent: 20,
+      shortPercent: 2,
     })
 
     function formatPercentTooltip(value) {
