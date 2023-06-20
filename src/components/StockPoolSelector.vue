@@ -15,6 +15,7 @@ import DateSelector from "cc/DateSelector.vue";
 import {apis} from "@/api";
 import dayjs from "dayjs";
 import {useMessage} from "naive-ui";
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: "StockPoolSelector",
@@ -29,6 +30,7 @@ export default defineComponent({
   emits: ['update:kLines'],
   setup(props, {emit}) {
     const {autoSelector} = toRefs(props)
+    const store = useStore()
     const message = useMessage()
     const template = "YYYY-MM-DD"
     const condition = reactive({
@@ -60,6 +62,15 @@ export default defineComponent({
     }
 
     function update() {
+      const cacheKey = `${condition.stockPoolSelectKey}-${condition.last}-${condition.cycle}`
+      console.log(store.state.stockPoolData[cacheKey])
+      if (store.state.stockPoolData[cacheKey]) {
+        condition.kLines = store.state.stockPoolData[cacheKey]
+        emit('update:kLines', condition.kLines)
+        message.success(condition.stockPoolSelectLabel + '股票池加载完成')
+        return
+      }
+
       condition.loading = true
       apis.capital_service_apis.query_k_json_by_stock_pool({
         "stock_pool": condition.stockPoolSelectKey,
@@ -69,6 +80,7 @@ export default defineComponent({
         condition.kLines = res['data']
         emit('update:kLines', condition.kLines)
         message.success(condition.stockPoolSelectLabel + '股票池加载完成')
+        store.commit('setKJsonByStockPool', {key:cacheKey, value:res['data']})
       }).catch((e) => {
         console.log(e)
         message.warning('请检查网络并稍后重试，或查看控制台报错信息：' + e['message'])
