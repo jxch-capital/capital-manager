@@ -4,19 +4,13 @@
       <n-space :vertical="false" size="small" justify="space-between">
         <n-space size="small">
           <stock-pool-selector v-model:k-lines="searcher.kLines" :auto-selector="false"/>
+          <n-input v-model:value="searcher.lastK" size="small" style="width: 40px"/>
           <n-input-number v-model:value="searcher.kSize" size="small" style="width: 80px"/>
-          <n-input size="small" style="width: 80px" v-model:value="searcher.searchCodeAlias" placeholder="Alias"/>
           <n-input size="small" style="width: 60px" v-model:value="searcher.threshold" placeholder="threshold"/>
-          <n-dropdown size="small" trigger="hover" :options="searcher.similar.similarOptions" @select="similarSelect">
-            <n-button size="small">GO</n-button>
-          </n-dropdown>
+          <n-input size="small" style="width: 80px" v-model:value="searcher.searchCodeAlias" placeholder="Alias"/>
+          <div v-html="searcher.closeSvg"></div>
         </n-space>
         <n-space size="small">
-          <div v-html="searcher.closeSvg"></div>
-          <p>LMS⬆:</p>
-          | <p :style="{ color: getUpsideTextColor(searcher.upside.long) }">{{ searcher.upside.long }}%</p>
-          | <p :style="{ color: getUpsideTextColor(searcher.upside.mid) }">{{ searcher.upside.mid }}%</p>
-          | <p :style="{ color: getUpsideTextColor(searcher.upside.short) }">{{ searcher.upside.short }}%</p> |
           <n-slider size="small" style="width: 80px" :default-value="searcher.laterDay.long" :step="1"
                     :min="60" :max="200" v-model:value="searcher.laterDay.long"
                     :format-tooltip="formatPercentTooltip"/>
@@ -26,13 +20,16 @@
           <n-slider size="small" style="width: 80px" :default-value="searcher.laterDay.short" :step="1"
                     :min="2" :max="60" v-model:value="searcher.laterDay.short"
                     :format-tooltip="formatPercentTooltip"/>
+          <n-dropdown size="small" trigger="hover" :options="searcher.similar.similarOptions" @select="similarSelect">
+            <n-button size="small">GO</n-button>
+          </n-dropdown>
         </n-space>
       </n-space>
     </n-card>
     <n-card size="small" hoverable style="height: 92%">
       <k-similar-scatter-chart :k-lines="searcher.kLines" :similarity-dict="searcher.similarityDict"
-                               v-model:upside="searcher.upside" :later-day="searcher.laterDay"
-                               :k-size="searcher.kSize"/>
+                               :later-day="searcher.laterDay" :k-size="searcher.kSize"
+                               style="width: 100%; height: 100%"/>
     </n-card>
   </div>
 </template>
@@ -52,12 +49,8 @@ export default defineComponent({
       kLines: '',
       searchCodeAlias: 'QQQ',
       kSize: 50,
+      lastK: 0,
       similarityDict: {},
-      upside: {
-        long: 0,
-        mid: 0,
-        short: 0,
-      },
       laterDay: {
         long: 120,
         mid: 60,
@@ -81,7 +74,8 @@ export default defineComponent({
     })
 
     function update() {
-      let searchCodeAliasKLines = searcher.kLines[searcher.searchCodeAlias].slice(-searcher.kSize)
+      let searchCodeAliasKLines = searcher.kLines[searcher.searchCodeAlias].slice(-searcher.kSize-searcher.lastK)
+      searchCodeAliasKLines = searchCodeAliasKLines.splice(-searcher.lastK)
       const inputArr = searchCodeAliasKLines.map((item) => [item['open'], item['high'], item['low'], item['close']])
       const codeSimilarityDict = {}
 
@@ -92,20 +86,10 @@ export default defineComponent({
           codeSimilarityDict[code] = similarityDict
         }
       }
-      console.log(codeSimilarityDict)
       searcher.similarityDict = codeSimilarityDict
       searcher.closeSvg = svgHtmlByArr(inputArr.map((arr) => arr[3]), 90, 20, 'black', 0.6)
     }
 
-    function getUpsideTextColor(value) {
-      if (value > 60) {
-        return "green";
-      } else if (value < 40) {
-        return "red";
-      } else {
-        return "gray";
-      }
-    }
 
     function similarSelect(key) {
       searcher.similar.func = key
@@ -115,7 +99,6 @@ export default defineComponent({
     return {
       similarSelect,
       formatPercentTooltip: (value) => `${value}日`,
-      getUpsideTextColor,
       searcher,
       update,
     }
