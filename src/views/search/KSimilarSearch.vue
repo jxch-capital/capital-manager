@@ -3,7 +3,7 @@
     <n-card size="small" hoverable style="height: 8%">
       <n-space :vertical="false" size="small" justify="space-between">
         <n-space size="small">
-          <stock-pool-selector v-model:k-lines="searcher.kLines" :auto-selector="false"/>
+          <stock-pool-selector v-model:k-lines="searcher.kLines" :auto-selector="true"/>
           <n-input v-model:value="searcher.lastK" size="small" style="width: 40px"/>
           <n-input-number v-model:value="searcher.kSize" size="small" style="width: 80px"/>
           <n-input size="small" style="width: 60px" v-model:value="searcher.threshold" placeholder="threshold"/>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {defineComponent, reactive} from "vue";
+import {defineComponent, reactive, onMounted, watch} from "vue";
 import StockPoolSelector from "cc/StockPoolSelector.vue";
 import {findSimilarSegments, findSimilarSegmentsDTW} from "./similar"
 import KSimilarScatterChart from "vv/search/KSimilarScatterChart.vue";
@@ -95,6 +95,12 @@ export default defineComponent({
       searcher.similar.func = key
       update()
     }
+
+    onMounted(()=>{
+      if (Object.keys(searcher.kLines).length > 0){
+        update()
+      }
+    })
 
     return {
       similarSelect,

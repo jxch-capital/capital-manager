@@ -156,6 +156,8 @@ export default defineComponent({
       }
     }
 
+    update(props.similarityDict)
+
     return {
       formatPercentTooltip: (value) => `${value}%`,
       expressionProbability,
