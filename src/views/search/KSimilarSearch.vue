@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import {defineComponent, reactive, watch} from "vue";
+import {defineComponent, reactive, onMounted, watch} from "vue";
 import StockPoolSelector from "cc/StockPoolSelector.vue";
 import {findSimilarSegments, findSimilarSegmentsDTW} from "./similar"
 import KSimilarScatterChart from "vv/search/KSimilarScatterChart.vue";
@@ -95,6 +95,12 @@ export default defineComponent({
       searcher.similar.func = key
       update()
     }
+
+    onMounted(()=>{
+      if (Object.keys(searcher.kLines).length > 0){
+        update()
+      }
+    })
 
     return {
       similarSelect,
