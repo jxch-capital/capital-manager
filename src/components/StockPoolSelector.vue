@@ -51,8 +51,16 @@ export default defineComponent({
     })
 
     function queryStockPool() {
+      if (Object.keys(store.state.stockPool).length > 0) {
+        condition.stockPool = store.state.stockPool
+        const keys = Object.keys(condition.stockPool)
+        stockPoolHandleSelect(keys[keys.length - 1])
+        return
+      }
+
       apis.capital_service_apis.query_stock_pool().then((res) => {
         condition.stockPool = res['data']
+        store.commit('setStockPool', {pool:res['data']})
         const keys = Object.keys(condition.stockPool)
         stockPoolHandleSelect(keys[keys.length - 1])
       }).catch((e) => {
@@ -63,11 +71,9 @@ export default defineComponent({
 
     function update() {
       const cacheKey = `${condition.stockPoolSelectKey}-${condition.last}-${condition.cycle}`
-      console.log(store.state.stockPoolData[cacheKey])
       if (store.state.stockPoolData[cacheKey]) {
         condition.kLines = store.state.stockPoolData[cacheKey]
         emit('update:kLines', condition.kLines)
-        message.success(condition.stockPoolSelectLabel + '股票池加载完成')
         return
       }
 

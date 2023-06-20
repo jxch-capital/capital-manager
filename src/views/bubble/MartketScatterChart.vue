@@ -143,6 +143,8 @@ export default defineComponent({
       }
     }
 
+    update(props.kLines)
+
     return {
       expressionProbability,
       expressionProbabilityVal,

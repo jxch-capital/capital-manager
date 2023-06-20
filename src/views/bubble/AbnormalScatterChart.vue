@@ -74,6 +74,7 @@ export default defineComponent({
       update(props.kLines)
     })
 
+    update(props.kLines)
     return {
       points
     }

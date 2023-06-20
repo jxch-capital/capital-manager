@@ -85,11 +85,7 @@ export default defineComponent({
 
     let chartDemo = getCurrentInstance().refs['scatter-chart']
 
-    onMounted(() => {
-      chartDemo = getCurrentInstance().refs['scatter-chart']
-    })
-
-    watch(() => props.pointsArr, (newData) => {
+    function update(newData) {
       mates.series = newData.map((point) => {
         return {
           type: 'scatter',
@@ -169,6 +165,15 @@ export default defineComponent({
       }
       chartOptions.series = mates.series
       chartDemo.setOption(chartOptions, true)
+    }
+
+    onMounted(() => {
+      chartDemo = getCurrentInstance().refs['scatter-chart']
+      update(props.pointsArr)
+    })
+
+    watch(() => props.pointsArr, (newData) => {
+      update(newData)
     })
 
     return {
