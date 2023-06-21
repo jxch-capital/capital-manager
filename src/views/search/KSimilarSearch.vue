@@ -21,7 +21,7 @@
                     :min="2" :max="60" v-model:value="searcher.laterDay.short"
                     :format-tooltip="formatPercentTooltip"/>
           <n-dropdown size="small" trigger="hover" :options="searcher.similar.similarOptions" @select="similarSelect">
-            <n-button size="small">GO</n-button>
+            <n-button size="small">{{ searcher.similar.label }}</n-button>
           </n-dropdown>
         </n-space>
       </n-space>
@@ -37,7 +37,7 @@
 <script>
 import {defineComponent, reactive, onMounted, watch} from "vue";
 import StockPoolSelector from "cc/StockPoolSelector.vue";
-import {findSimilarSegments, findSimilarSegmentsDTW} from "./similar"
+import {func} from "./similar"
 import KSimilarScatterChart from "vv/search/KSimilarScatterChart.vue";
 import {svgHtmlByArr} from "@/components/svg"
 
@@ -57,24 +57,42 @@ export default defineComponent({
         short: 20,
       },
       closeSvg: '',
-      threshold: 0.8,
+      threshold: 0.95,
       similar: {
         similarOptions: [
           {
-            label: '欧几里得',
-            key: findSimilarSegments,
-          },
-          {
-            label: 'DTW',
-            key: findSimilarSegmentsDTW,
+            label: 'SRCC-斯皮尔曼等级相关系数（结构优先）',
+            key: func.findSimilarSegmentsSpearmanRankStructureFirst,
+          }, {
+            label: 'PCC-皮尔逊相关系数（结构优先）',
+            key: func.findSimilarSegmentsPCCStructureFirst,
+          }, {
+            label: '欧几里得（结构优先）',
+            key: func.findSimilarSegmentsEuclideanStructureFirst,
+          }, {
+            label: 'DTW-动态时间规整（结构优先）',
+            key: func.findSimilarSegmentsDTWStructureFirst,
+          }, {
+            label: '余弦相似度（结构优先）',
+            key: func.findSimilarSegmentsCosineStructureFirst,
+          }, {
+            label: '曼哈顿距离（结构优先）',
+            key: func.findSimilarSegmentsManhattanStructureFirst,
+          }, {
+            label: '欧几里得（细节优先）',
+            key: func.findSimilarSegmentsEuclidDetailsFirst,
+          }, {
+            label: 'DTW-动态时间规整（细节优先）',
+            key: func.findSimilarSegmentsDTWDetailsFirst,
           }
         ],
-        func: findSimilarSegments
+        func: func.findSimilarSegmentsSpearmanRankStructureFirst,
+        label: 'SRCC-斯皮尔曼等级相关系数（结构优先）',
       }
     })
 
     function update() {
-      let searchCodeAliasKLines = searcher.kLines[searcher.searchCodeAlias].slice(-searcher.kSize-searcher.lastK)
+      let searchCodeAliasKLines = searcher.kLines[searcher.searchCodeAlias].slice(-searcher.kSize - searcher.lastK)
       searchCodeAliasKLines = searchCodeAliasKLines.splice(-searcher.lastK)
       const inputArr = searchCodeAliasKLines.map((item) => [item['open'], item['high'], item['low'], item['close']])
       const codeSimilarityDict = {}
@@ -93,11 +111,18 @@ export default defineComponent({
 
     function similarSelect(key) {
       searcher.similar.func = key
+      searcher.similar.label = searcher.similar.similarOptions.find((obj => obj.key === key)).label
       update()
     }
 
-    onMounted(()=>{
-      if (Object.keys(searcher.kLines).length > 0){
+    onMounted(() => {
+      if (Object.keys(searcher.kLines).length > 0) {
+        update()
+      }
+    })
+
+    watch(() => searcher.threshold, () => {
+      if (Object.keys(searcher.kLines).length > 0) {
         update()
       }
     })
