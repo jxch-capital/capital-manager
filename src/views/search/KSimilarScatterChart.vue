@@ -3,6 +3,7 @@
     <n-space :vertical="false" size="small" justify="space-between">
       <n-space size="small">
         <n-tr size="small">
+          <td title="匹配个数" style="background-color: gainsboro">{{ points.arr.length }}</td>
           <td title="上涨概率" style="background-color: gainsboro">⬆</td>
           <td :title="`P(short>${th.short})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(short>${th.short})`))}">{{ expressionProbability(`P(short>${th.short})`) }}</td>
           <td :title="`P(mid>${th.mid})`" :style="{'background-color': getBKColor(expressionProbabilityVal(`P(mid>${th.mid})`))}">{{ expressionProbability(`P(mid>${th.mid})`) }}</td>
