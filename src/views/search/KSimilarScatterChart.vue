@@ -119,7 +119,7 @@ export default defineComponent({
               coordinate: [m_p, l_p],
               size: 10 + similarityDict[alias][index] * 10,
               color: getColor(s_p, 10),
-              name: alias + '<br>' + dayjs(aliasKLines[Number(index)]['Date']).format(template) + `<br>${similarityDict[alias][index].toFixed(2)}`,
+              name: alias + '<br>' + dayjs(aliasKLines[Number(index)]['date']).format(template) + `<br>${similarityDict[alias][index].toFixed(2)}`,
               code: aliasKLines[Number(index)]['code'],
               closeArr: aliasKLines.slice(Number(index), f_index).map((item) => item['close']),
               zPercent: s_p,
