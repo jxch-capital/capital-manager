@@ -4,7 +4,7 @@ import {Calculator, TrendingUp, PlaySkipBackOutline, PlaySkipBackCircleOutline} 
 import {ChartMultiLine, ToolsAlt, HeatMap03, ChartBubblePacked} from '@vicons/carbon'
 import {BubbleChartFilled, CandlestickChartOutlined} from '@vicons/material'
 import {DeveloperBoardSearch20Regular} from '@vicons/fluent'
-import {Connectdevelop} from '@vicons/fa'
+import {Dev} from '@vicons/fa'
 
 function renderIcon(icon: Component) {
     return () => h(NIcon, null, {default: () => h(icon)})
@@ -87,7 +87,7 @@ export const index_routers = [
         label: "待开发",
         name: 'dev',
         key: 'dev',
-        icon: renderIcon(Connectdevelop),
+        icon: renderIcon(Dev),
         children: [
             {
                 path: '/pa-k',
