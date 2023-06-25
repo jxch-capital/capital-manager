@@ -12,23 +12,23 @@
           <n-input size="small" placeholder="准确描述一下"/>
         </n-space>
       </n-form-item>
-      <n-form-item size="small" label="当前图表中有哪些值得关注的价格行为？" required>
+      <n-form-item size="small" label="你觉得当前图表中有哪些值得关注的价格行为？" required>
         <n-input size="small" type="textarea"/>
       </n-form-item>
-      <n-form-item size="small" label="后续市场倾向延续哪些价格行为？" required>
+      <n-form-item size="small" label="你觉得后续市场倾向延续哪些价格行为？" required>
         <n-input size="small" type="textarea"/>
       </n-form-item>
       <n-form-item size="small" label="你发现了哪些交易机会？会怎样制定交易计划？" required>
         <n-input size="small" type="textarea"/>
       </n-form-item>
-      <n-form-item size="small" label="后续市场行为中有哪些符合你预期？" required>
+      <n-form-item size="small" label="后续市场行为中有哪些符合你的预期？" required>
         <n-space size="small" vertical>
           <n-space size="small">
             <n-checkbox size="small" value="bull" label="市场状态"/>
             <n-checkbox size="small" value="area" label="价格行为"/>
             <n-checkbox size="small" value="bear" label="交易计划"/>
           </n-space>
-          <n-input size="small" placeholder="精确描述一下"/>
+          <n-input size="small" type="textarea" placeholder="有哪些经验教训"/>
         </n-space>
       </n-form-item>
       <n-space size="small">
