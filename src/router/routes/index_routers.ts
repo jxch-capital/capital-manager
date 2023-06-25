@@ -2,7 +2,7 @@ import {Component, h} from "vue";
 import {NIcon} from "naive-ui";
 import {Calculator, TrendingUp, PlaySkipBackOutline, PlaySkipBackCircleOutline} from '@vicons/ionicons5'
 import {ChartMultiLine, ToolsAlt, HeatMap03, ChartBubblePacked} from '@vicons/carbon'
-import {BubbleChartFilled, CandlestickChartOutlined} from '@vicons/material'
+import {BubbleChartFilled, CandlestickChartOutlined, EditNoteSharp} from '@vicons/material'
 import {DeveloperBoardSearch20Regular} from '@vicons/fluent'
 import {Dev} from '@vicons/fa'
 
@@ -13,6 +13,13 @@ function renderIcon(icon: Component) {
 
 export const index_routers = [
     {
+        path: '/pa-practice',
+        label: "价格行为练习",
+        name: 'pa-practice',
+        key: 'pa-practice',
+        icon: renderIcon(EditNoteSharp),
+        component: () => import('vv/practice/PaPractice.vue'),
+    },{
         path: '/k-similar-search',
         label: "相似K线搜索引擎",
         name: 'k-similar-search',
