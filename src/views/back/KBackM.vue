@@ -52,6 +52,7 @@ import {apis} from "@/api";
 import dayjs from "dayjs";
 import KLine from "vv/back/KLine.vue";
 import {useMessage} from 'naive-ui'
+import {EMA} from "technicalindicators";
 
 export default defineComponent({
     name: "KBackM",
@@ -112,7 +113,12 @@ export default defineComponent({
                     return;
                 }
 
-                const dataset = res.data[params.code].map(item => [
+              const kData = res.data[params.code]
+              let period = 20;
+              let values = kData.map(item => item.close);
+              let emaArr = new Array(period - 1).fill(0).concat(EMA.calculate({period: period, values: values}));
+
+                const dataset = kData.map((item, index) => [
                     dayjs(item['date']).format(template),
                     item['open'].toFixed(2),
                     item['high'].toFixed(2),
@@ -120,7 +126,7 @@ export default defineComponent({
                     item['close'].toFixed(2),
                     item['volume'].toFixed(2),
                     item['close'] > item['open'] ? 1 : item['close'] < item['open'] ? -1 : 0,
-                    item['close_20_ema'].toFixed(2),
+                  emaArr[index].toFixed(2),
                 ])
 
 
@@ -172,6 +178,7 @@ export default defineComponent({
             params,
             k_data,
             start_back,
+            next,
         }
     }
 })
