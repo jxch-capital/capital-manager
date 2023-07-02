@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import {defineComponent, reactive, toRefs, toRaw, watch} from "vue";
+import {defineComponent, reactive, toRefs, toRaw, watch, getCurrentInstance, onMounted} from "vue";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -148,9 +148,17 @@ export default defineComponent({
                         x: 0,
                         y: [1, 4, 3, 2]
                     },
-                    markPoint: {
-                        symbol: 'pin',
-                        data: [],
+                    markLine: {
+                      symbol: 'none',
+                      label: {
+                        show: false
+                      },
+                      lineStyle: {
+                        type: 'dashed',
+                        color: 'gray',
+                      },
+                      data: [],
+                      z: 0,
                     }
                 },
                 {
@@ -166,7 +174,8 @@ export default defineComponent({
                         x: 0,
                         y: 5
                     }
-                }, {
+                },
+                {
                     name: "SMA20",
                     type: "line",
                     encode: {
@@ -187,18 +196,27 @@ export default defineComponent({
             ]
         })
 
-        watch(() => props.splitTime,
-            (newSplitTime) => {
-                toRaw(props.splitTime).forEach((value, index) => {
-                    chartOptions.series[0].markPoint.data.push({
-                        name: 'Mark',
-                        coord: [value[0], value[1] + 1],
-                        value: dayjs(value[0].replace('\n', ' ')).format('MM/DD\nHH:mm'),
-                        itemStyle: {color: 'rgba(41,60,85,0.7)',}
-                    })
-                })
+      let chartDemo = getCurrentInstance().refs['k-line-chart']
+      onMounted(() => {
+        chartDemo = getCurrentInstance().refs['k-line-chart']
+        updateSplitTime(props.splitTime)
+      })
+
+      function updateSplitTime(newSplitTime) {
+        console.log(newSplitTime)
+        if (newSplitTime) {
+          chartOptions.series[0].markLine.data = toRaw(newSplitTime).map(item => {
+            return {
+              xAxis: item[0]
             }
-        )
+          })
+        }
+
+      }
+
+      watch(() => props.splitTime, (newSplitTime) => {
+        updateSplitTime(newSplitTime)
+      })
 
         return {
             chartOptions

@@ -1,7 +1,8 @@
 <template>
     <div style="height: 100%;">
         <n-card size="small" hoverable style="height: 88%">
-            <k-line :name="k_data.name" :data-arr="k_data.data_arr" :data-zoom="100 - Math.floor(100 * k_data.k_number / k_data.index)"/>
+            <k-line :name="k_data.name" :data-arr="k_data.data_arr" :data-zoom="100 - Math.floor(100 * k_data.k_number / k_data.index)"
+            :split-time="k_data.split_time"/>
         </n-card>
         <n-card size="small" hoverable>
             <n-space justify="start" size="small">
@@ -51,6 +52,7 @@ import {apis} from "@/api";
 import dayjs from "dayjs";
 import KLine from "vv/back/KLine.vue";
 import {useMessage} from 'naive-ui'
+import {EMA} from "technicalindicators";
 
 export default defineComponent({
     name: "KBackD",
@@ -78,6 +80,7 @@ export default defineComponent({
             k_length: 0,
             k_number: 150,
             loading: false,
+            split_time: [],
         })
 
         function start_back() {
@@ -104,18 +107,24 @@ export default defineComponent({
                     return;
                 }
 
-                const dataset = res.data[params.code].map(item => [
-                    dayjs(item['Date']).format(template),
+                const kData = res.data[params.code]
+                let period = 20;
+                let values = kData.map(item => item.close);
+                let emaArr = new Array(period - 1).fill(0).concat(EMA.calculate({period: period, values: values}));
+
+                const dataset = kData.map((item, index) => [
+                    dayjs(item['date']).format(template),
                     item['open'].toFixed(2),
                     item['high'].toFixed(2),
                     item['low'].toFixed(2),
                     item['close'].toFixed(2),
                     item['volume'].toFixed(2),
                     item['close'] > item['open'] ? 1 : item['close'] < item['open'] ? -1 : 0,
-                    item['close_20_ema'].toFixed(2),
+                    emaArr[index].toFixed(2),
                 ])
 
                 k_data.index = dataset.findIndex(item => item[0] === params.back)
+
                 while (k_data.index === -1 || params.back > params.end) {
                     params.back = dayjs(params.back).subtract(1, 'day').format(template)
                     k_data.index = dataset.findIndex(item => item[0] === params.back)
@@ -126,6 +135,11 @@ export default defineComponent({
                 k_data.all_data_arr = dataset
                 k_data.data_arr = dataset.slice(0, k_data.index)
                 params.loading = false
+
+                const item = dataset[dataset.length - 1]
+                k_data.split_time = [[
+                  params.back, dataset[k_data.index][2]
+                ]]
             })
         }
 
