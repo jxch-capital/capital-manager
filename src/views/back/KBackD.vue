@@ -150,7 +150,7 @@ export default defineComponent({
 
           if (msg !== "") {
             notification.create({
-              title: k_data.data_arr[k_data.data_arr.length - 1]['date'],
+              title: k_data.data_arr[k_data.data_arr.length - 1][0],
               content: msg,
               duration: 1000 * 60 * 5
             })
