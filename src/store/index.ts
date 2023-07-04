@@ -6,7 +6,8 @@ import {apis} from "@/api";
 export default createStore({
     state: {
         stockPool: {},
-        stockPoolData: {}
+        stockPoolData: {},
+        notificationPlacement: "top-left",
     },
     mutations: {
         setKJsonByStockPool(state: any, {key, value}) {

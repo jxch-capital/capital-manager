@@ -7,6 +7,8 @@ const capital_service_api = axios.create({
 })
 
 
+
+
 export const query_k_json = (params: Object) => capital_service_api.post(`/base/query_k_json`, JSON.stringify(params))
 export const query_breath_json = (params: Object) => capital_service_api.post(`/base/query_breath_json`, JSON.stringify(params))
 export const query_stock_pool = () => capital_service_api.post(`/base/query_stock_pool`)
