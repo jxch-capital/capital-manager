@@ -143,8 +143,8 @@ export default defineComponent({
           let msg = ""
           for (const index in res.data.body) {
             const item = res.data.body[index]
-            msg += "形态：" + item['title'] + "\n"
-            msg += "   信息：" + item['msg'] + "\n"
+            msg += "形态：" + item['title'] + "-" + item['summary'] + "\n"
+            msg += "   信息：" + item['detailed'] + "\n"
             msg += "============================\n"
           }
 
