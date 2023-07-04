@@ -1,174 +1,181 @@
 <template>
-    <div style="height: 100%;">
-        <n-card size="small" hoverable style="height: 88%">
-            <k-line :name="k_data.name" :data-arr="k_data.data_arr" :data-zoom="100 - Math.floor(100 * k_data.k_number / k_data.index)"
-            :split-time="k_data.split_time"/>
-        </n-card>
-        <n-card size="small" hoverable>
-            <n-space justify="start" size="small">
-                <n-form
-                        ref="formRef"
-                        :model="params"
-                        label-placement="left"
-                        label-width="auto"
-                        require-mark-placement="right-hanging"
-                        size="small"
-                        inline
-                >
-                    <n-form-item label="interval" path="inputValue" label-placement="left" size="small">
-                        <n-input v-model:value="params.interval" placeholder="interval" style="width: 100px"/>
-                    </n-form-item>
-                    <n-form-item label="service" path="inputValue" label-placement="left" size="small">
-                        <n-input v-model:value="params.service_code" placeholder="service_code" style="width: 100px"/>
-                    </n-form-item>
-                    <n-form-item label="code" path="inputValue" label-placement="left" size="small">
-                        <n-input v-model:value="params.code" placeholder="code" style="width: 100px"/>
-                    </n-form-item>
-                    <n-form-item label="start" path="inputValue" label-placement="left" size="small">
-                        <n-input v-model:value="params.start" placeholder="start"/>
-                    </n-form-item>
-                    <n-form-item label="end" path="inputValue" label-placement="left" size="small">
-                        <n-input v-model:value="params.end" placeholder="end"/>
-                    </n-form-item>
-                    <n-form-item label="back" path="inputValue" label-placement="left" size="small">
-                        <n-input v-model:value="params.back" placeholder="back"/>
-                    </n-form-item>
-                    <n-button size="small" @click="start_back" :loading="params.loading">开始回放</n-button>
-                    <n-divider vertical/>
-                    <n-form-item label="K线数量" path="inputValue" label-placement="left" size="small">
-                        <n-input v-model:value="k_data.k_number" placeholder="k_number"/>
-                    </n-form-item>
-                    <n-divider vertical/>
-                    <n-button size="small" @click="next" :loading="k_data.loading">Next &rarr;</n-button>
-                </n-form>
-            </n-space>
-        </n-card>
-    </div>
+  <div style="height: 100%;">
+    <n-card size="small" hoverable style="height: 8%">
+      <n-space justify="space-between" size="small">
+        <n-space size="small">
+          <n-date-picker size="small" v-model:value="params.range" type="daterange" clearable style="width: 260px"/>
+          <n-date-picker size="small" v-model:value="params.back" type="date" clearable style="width: 120px"/>
+          <n-input size="small" v-model:value="params.code" placeholder="code" style="width: 60px"/>
+          <n-button size="small" @click="start_back" :loading="params.loading">开始回放</n-button>
+        </n-space>
+        <n-space size="small">
+          <n-input size="small" v-model:value="k_data.k_number" placeholder="k_number" style="width: 60px"/>
+          <n-button size="small" @click="next" :loading="k_data.loading">Next &rarr;</n-button>
+        </n-space>
+      </n-space>
+    </n-card>
+    <n-card size="small" hoverable style="height: 92%">
+      <k-line :name="k_data.name" :data-arr="k_data.data_arr"
+              :data-zoom="100 - Math.floor(100 * k_data.k_number / k_data.index)"
+              :split-time="k_data.split_time"/>
+    </n-card>
+  </div>
 </template>
 
 <script>
-import {defineComponent, onBeforeMount, reactive, getCurrentInstance, onUpdated} from "vue";
+import {defineComponent, onBeforeMount, reactive, getCurrentInstance, toRaw} from "vue";
 import {apis} from "@/api";
 import dayjs from "dayjs";
 import KLine from "vv/back/KLine.vue";
-import {useMessage} from 'naive-ui'
+import {useMessage, useNotification} from 'naive-ui'
 import {EMA} from "technicalindicators";
 
 export default defineComponent({
-    name: "KBackD",
-    components: {KLine},
+  name: "KBackD",
+  components: {KLine},
 
-    setup() {
-        const message = useMessage()
-        const template = "YYYY-MM-DD"
+  setup() {
+    const message = useMessage()
+    const template = "YYYY-MM-DD"
+    const notification = useNotification()
 
-        const params = reactive({
-            service_code: 'yf',
-            code: 'SPY',
-            start: dayjs(new Date()).subtract(10 * 12, 'month').format(template),
-            end: dayjs(new Date()).format(template),
-            back: dayjs(new Date()).subtract(3 * 12, 'month').format(template),
-            interval: '1d',
-            loading: false,
-        })
+    const params = reactive({
+      service_code: 'yf',
+      code: 'SPY',
+      back: dayjs(Date.now()).subtract(3, 'month').valueOf(),
+      interval: '1d',
+      loading: false,
+      range: [dayjs("2010-01-01", template).valueOf(), Date.now()],
+    })
 
-        let k_data = reactive({
-            name: params.code,
-            all_data_arr: [],
-            index: 0,
-            data_arr: [],
-            k_length: 0,
-            k_number: 150,
-            loading: false,
-            split_time: [],
-        })
+    let k_data = reactive({
+      name: params.code,
+      all_data_arr: [],
+      index: 0,
+      data_arr: [],
+      k_length: 0,
+      k_number: 150,
+      loading: false,
+      split_time: [],
+    })
 
-        function start_back() {
-            params.loading = true
+    function start_back() {
+      params.loading = true
 
-            if (params.back < params.start || params.back > params.end) {
-                message.warning("回放日期应该在开始日期和结束日期中间")
-                params.loading = false
-                return;
-            }
+      if (params.back < params.range[0] || params.back > params.range[1]) {
+        message.warning("回放日期应该在开始日期和结束日期中间")
+        params.loading = false
+        return;
+      }
 
-            apis.capital_service_apis.query_k_json({
-                "service_code": params.service_code,
-                "codes": [params.code],
-                "start": params.start,
-                "end": params.end,
-                "interval": params.interval,
-            }).then(res => {
+      apis.capital_service_apis.query_k_json({
+        "service_code": params.service_code,
+        "codes": [params.code],
+        "start": dayjs(params.range[0]).format(template),
+        "end": dayjs(params.range[1]).format(template),
+        "interval": params.interval,
+      }).then(res => {
 
-                if (JSON.stringify(res.data) === '{}') {
-                    message.error("服务器无返回，可能是参数错误")
-                    params.loading = false
-                    console.log(res)
-                    return;
-                }
-
-                const kData = res.data[params.code]
-                let period = 20;
-                let values = kData.map(item => item.close);
-                let emaArr = new Array(period - 1).fill(0).concat(EMA.calculate({period: period, values: values}));
-
-                const dataset = kData.map((item, index) => [
-                    dayjs(item['date']).format(template),
-                    item['open'].toFixed(2),
-                    item['high'].toFixed(2),
-                    item['low'].toFixed(2),
-                    item['close'].toFixed(2),
-                    item['volume'].toFixed(2),
-                    item['close'] > item['open'] ? 1 : item['close'] < item['open'] ? -1 : 0,
-                    emaArr[index].toFixed(2),
-                ])
-
-                k_data.index = dataset.findIndex(item => item[0] === params.back)
-
-                while (k_data.index === -1 || params.back > params.end) {
-                    params.back = dayjs(params.back).subtract(1, 'day').format(template)
-                    k_data.index = dataset.findIndex(item => item[0] === params.back)
-                }
-
-                k_data.k_length = dataset.length
-                k_data.name = params.code
-                k_data.all_data_arr = dataset
-                k_data.data_arr = dataset.slice(0, k_data.index)
-                params.loading = false
-
-                const item = dataset[dataset.length - 1]
-                k_data.split_time = [[
-                  params.back, dataset[k_data.index][2]
-                ]]
-            })
+        if (res.data && res.data.code && res.data.code === -1) {
+          message.error("服务器内部错误，可能是参数错误：" + res['data']['msg'])
+          params.loading = false
+          console.log(res)
+          return;
         }
 
-        function next() {
-            k_data.loading = true
-            k_data.index = k_data.index + 1
-            if (k_data.index === k_data.k_length) {
-                message.success('回放结束')
-            } else {
-                k_data.data_arr = k_data.all_data_arr.slice(0, k_data.index)
-            }
-            k_data.loading = false
+        const kData = res.data[params.code]
+        let period = 20;
+        let values = kData.map(item => item.close);
+        let emaArr = new Array(period - 1).fill(0).concat(EMA.calculate({period: period, values: values}));
+
+        const dataset = kData.map((item, index) => [
+          dayjs(item['date']).format(template),
+          item['open'].toFixed(2),
+          item['high'].toFixed(2),
+          item['low'].toFixed(2),
+          item['close'].toFixed(2),
+          item['volume'].toFixed(2),
+          item['close'] > item['open'] ? 1 : item['close'] < item['open'] ? -1 : 0,
+          emaArr[index].toFixed(2),
+        ])
+
+        k_data.index = dataset.findIndex(item => item[0] === params.back)
+
+        while (k_data.index === -1 || params.back > params.range[1]) {
+          params.back = dayjs(params.back).subtract(1, 'day').valueOf()
+          k_data.index = dataset.findIndex(item => item[0] === dayjs(params.back).format(template))
         }
 
-        document.addEventListener("keyup", function (e) {
-            if (e.key === "ArrowRight") {
-                next()
-            }
-        })
+        k_data.k_length = dataset.length
+        k_data.name = params.code
+        k_data.all_data_arr = dataset
+        k_data.data_arr = dataset.slice(0, k_data.index)
+        params.loading = false
 
-        start_back()
-
-        return {
-            params,
-            k_data,
-            start_back,
-            next,
-        }
+        k_data.split_time = [[
+          dayjs(params.back).format(template), dataset[k_data.index][2]
+        ]]
+      })
     }
+
+    function next() {
+      k_data.loading = true
+      k_data.index = k_data.index + 1
+      if (k_data.index === k_data.k_length) {
+        message.success('回放结束')
+      } else {
+        k_data.data_arr = k_data.all_data_arr.slice(0, k_data.index)
+      }
+
+      const histKs = k_data.data_arr.map(item => ({
+        "date": dayjs(item[0], template).valueOf(),
+        "open": item[1],
+        "high": item[2],
+        "low": item[3],
+        "close": item[4],
+        "volume": item[5],
+      }))
+
+      apis.capital_pa_apis.pa_analyze_default({
+        "histKs": histKs
+      }).then(res => {
+        if (res.data.body) {
+          let msg = ""
+          for (const index in res.data.body) {
+            const item = res.data.body[index]
+            msg += "形态：" + item['title'] + "\n"
+            msg += "   信息：" + item['msg'] + "\n"
+            msg += "============================\n"
+          }
+
+          if (msg !== "") {
+            notification.create({
+              title: k_data.data_arr[k_data.data_arr.length - 1]['date'],
+              content: msg,
+              duration: 1000 * 60 * 5
+            })
+          }
+        }
+      }).finally(() => {
+        k_data.loading = false
+      })
+    }
+
+    document.addEventListener("keyup", function (e) {
+      if (e.key === "ArrowRight") {
+        next()
+      }
+    })
+
+    start_back()
+
+    return {
+      params,
+      k_data,
+      start_back,
+      next,
+    }
+  }
 })
 
 </script>
