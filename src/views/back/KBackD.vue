@@ -165,6 +165,9 @@ export default defineComponent({
       if (e.key === "ArrowRight") {
         next()
       }
+      if (e.key === "Escape"){
+        notification.destroyAll()
+      }
     })
 
     start_back()
