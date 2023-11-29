@@ -86,7 +86,6 @@ export default defineComponent({
     })
 
     const heightPX = (window.innerHeight / 3 - 22).toFixed(0) + 'px'
-    console.log(heightPX)
     return {
       heap,
       heightPX,
