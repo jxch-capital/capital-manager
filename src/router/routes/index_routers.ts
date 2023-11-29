@@ -77,12 +77,12 @@ export const index_routers = [
         // component: () => import('vv/hot/Hot.vue'),
         children: [
             {
-                path: '/hot-a',
-                label: "热度图（A股）",
-                name: 'hot-a',
-                key: 'hot-a',
+                path: '/hot-a-dongfang',
+                label: "A股行业板块（东方财富）",
+                name: 'hot-a-dongfang',
+                key: 'hot-a-dongfang',
                 icon: renderIcon(HeatMap03),
-                component: () => import('vv/hot/HotA.vue'),
+                component: () => import('vv/hot/HotADongfang.vue'),
             }
         ]
     }, {
