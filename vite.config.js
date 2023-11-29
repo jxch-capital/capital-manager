@@ -52,6 +52,12 @@ export default () => {
                     changeOrigin: true,
                     rewrite: (path) => path.replace(/^\/capital_service_api/, ''),
                 },
+                "/aktools": {
+                    target: "http://8.142.100.222:18088",
+                    // target: "http://127.0.0.1:5000",
+                    changeOrigin: true,
+                    rewrite: (path) => path.replace(/^\/aktools/, ''),
+                },
                 "/capital_pa_api": {
                     target: "http://jiangxicheng.site:18088",
                     // target: "http://127.0.0.1:8080",

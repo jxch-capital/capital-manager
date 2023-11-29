@@ -69,6 +69,23 @@ export const index_routers = [
         icon: renderIcon(HeatMap03),
         component: () => import('vv/breaths/Breaths.vue'),
     }, {
+        path: '/hot',
+        label: "热度图",
+        name: 'hot',
+        key: 'hot',
+        icon: renderIcon(HeatMap03),
+        // component: () => import('vv/hot/Hot.vue'),
+        children: [
+            {
+                path: '/hot-a',
+                label: "热度图（A股）",
+                name: 'hot-a',
+                key: 'hot-a',
+                icon: renderIcon(HeatMap03),
+                component: () => import('vv/hot/HotA.vue'),
+            }
+        ]
+    }, {
         path: '/sectors-us',
         label: "板块图",
         name: 'sectors-us',

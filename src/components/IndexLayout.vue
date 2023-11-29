@@ -49,7 +49,8 @@ export default defineComponent({
             router.push({path: key});
         };
         onMounted(() => {
-            document.getElementsByClassName('n-menu-item-content__icon')[0].click()
+          // todo 默认菜单
+            // document.getElementsByClassName('n-menu-item-content__icon')[0].click()
         })
         return {
             collapsed: ref(true),
